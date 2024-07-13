@@ -5,7 +5,10 @@ const contractAddress = '0xC67DCE33D7A8efA5FfEB961899C73fe01bCe9273';
 const provider = new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/flare_coston2/7c66d8fb2d926f141f7fd511165a470c2ff3495f699afa835a4fd7f2f3bfb976');
 const chunkSize = 2000;
 
-export async function fetchAndFilterEvents(address: string) {
+export async function fetchAndFilterEvents(address: string | `0x${string}` | undefined) {
+  if (!address) {
+    return 0;
+  }
   const startBlock = 9797798; // You can specify the start block if needed
   const endBlock = await provider.getBlockNumber();
 
@@ -38,7 +41,10 @@ export async function fetchAndFilterEvents(address: string) {
   return amount;
 }
 
-export async function getTotalTransactionsaddress(address: string) {
+export async function getTotalTransactionsaddress(address: string | `0x${string}` | undefined) {
+  if (!address) {
+    return 0;
+  }
   try {
     const apiUrl = `https://coston2-explorer.flare.network/api?module=account&action=txlist&address=${address}`;
     const response = await fetch(apiUrl);
