@@ -6,7 +6,6 @@ if (!signerPrivateKey) {
   throw new Error('VITE_SIGNER_PRIVATE_KEY not set in .env');
 }
 const signer = new ethers.Wallet(signerPrivateKey);
-console.log('signer', signer.address);
 
 // create a function to decide number of points needed to mint for a given level
 
@@ -60,10 +59,8 @@ export const useMintParams = () => {
     setLevel(_level);
     const _canMint = canMintForLevel(_level);
     setCanMint(_canMint);
-    console.log('canMint', _canMint, 'level', _level);
     if (_canMint) {
       const { messageHash, signature } = await signClaim(level);
-      console.log('messageHash', messageHash, 'signature', signature);
       setMessageHash(messageHash);
       setSignature(signature);
     }
