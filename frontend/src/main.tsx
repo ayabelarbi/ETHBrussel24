@@ -1,15 +1,20 @@
-import React, {useState, createContext, useEffect} from "react";
+import React, { useState, createContext, useEffect } from "react";
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { ChakraProvider } from '@chakra-ui/react';
 
+// WAGMI setup
+import { WagmiProvider } from 'wagmi';
+import { config } from './lib/wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 
-import { PrivyProvider} from '@privy-io/react-auth';
+import { PrivyProvider } from '@privy-io/react-auth';
 
 // import { Web3Auth, decodeToken } from "@web3auth/single-factor-auth";
-import {privateKeyProvider} from "./utils/privateKeyProviders";
+import { privateKeyProvider } from "./utils/privateKeyProviders";
 
 // import { ADAPTER_EVENTS, IProvider } from "@web3auth/base";
 // import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
@@ -20,6 +25,7 @@ import Web3 from "web3";
 // const verifier = "w3a-firebase-demo";
 
 export const AuthContext = createContext<any>(null);
+const queryClient = new QueryClient();
 
 
 import Fonts from "./utils/fonts.tsx";
@@ -34,7 +40,7 @@ const NavigateToDashboard = ({ setIsLoggedIn }: { setIsLoggedIn: React.Dispatch<
     setIsLoggedIn(true);
     navigate('/dashboard');
   }, [setIsLoggedIn, navigate]);
-  return null; 
+  return null;
 };
 
 
@@ -77,7 +83,7 @@ const App = () => {
         <PrivyProvider
           appId='clyk29n9100fx13sboti8ylpg'
           config={{
-            loginMethods: ['email', 'wallet', 'discord', 'google', 'sms', 'github','linkedin', 'spotify', 'farcaster'],
+            loginMethods: ['email', 'wallet', 'discord', 'google', 'sms', 'github', 'linkedin', 'spotify', 'farcaster'],
             appearance: {
               theme: 'light',
               accentColor: '#676FFF',
@@ -90,14 +96,18 @@ const App = () => {
 
         >
           <ChakraProvider theme={theme}>
-            <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
-              <Fonts />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                {isLoggedIn && <Route path="*" element={<NavigateToDashboard setIsLoggedIn={setIsLoggedIn} />} />}
-              </Routes>
-            </AuthContext.Provider>
+            <WagmiProvider config={config}>
+              <QueryClientProvider client={queryClient}>
+                <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+                  <Fonts />
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    {isLoggedIn && <Route path="*" element={<NavigateToDashboard setIsLoggedIn={setIsLoggedIn} />} />}
+                  </Routes>
+                </AuthContext.Provider>
+              </QueryClientProvider>
+            </WagmiProvider>
           </ChakraProvider>
         </PrivyProvider>
       </BrowserRouter>

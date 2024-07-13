@@ -19,13 +19,17 @@
     "@web3auth/ethereum-provider": "^8.10.2",
     "@web3auth/single-factor-auth": "^8.0.2",
     "buffer": "^6.0.3",
-    "dotenv": "^16.4.5",
     "firebase": "^10.12.3",
+    "@tanstack/react-query": "^5.51.1",
+    "dotenv": "^16.4.5",
+    "ethers": "^5.7.2",
     "framer-motion": "^11.3.2",
     "process": "^0.11.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.24.1"
+    "react-router-dom": "^6.24.1",
+    "viem": "^2.17.3",
+    "wagmi": "^2.10.10"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
