@@ -26,6 +26,7 @@ const Home = () => {
 
   useEffect(() => {
     if (isSuccess) {
+        console.log('isSuccess', isSuccess);
       navigate('/dashboard'); 
     }
   }, [isSuccess, navigate]);
@@ -69,7 +70,7 @@ const Home = () => {
         </Box>
       </Box>
 
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered size="xl">
         <ModalOverlay
           sx={{
             backdropFilter: "blur(10px)",
