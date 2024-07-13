@@ -1,0 +1,25 @@
+{
+  "name": "defi-score",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "hardhat test"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@matterlabs/hardhat-zksync-verify": "^1.5.0",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.6"
+  },
+  "dependencies": {
+    "@matterlabs/hardhat-zksync": "^1.1.0",
+    "@matterlabs/hardhat-zksync-deploy": "^1.5.0",
+    "@matterlabs/hardhat-zksync-solc": "^1.2.1",
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.5",
+    "@openzeppelin/contracts": "^5.0.2",
+    "dotenv": "^16.4.5",
+    "hardhat-contract-sizer": "^2.10.0"
+  }
+}
