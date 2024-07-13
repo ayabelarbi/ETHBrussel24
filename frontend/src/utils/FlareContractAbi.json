@@ -1,0 +1,46 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "dst",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "Deposit",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "priorVotePower",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "newVotePower",
+        "type": "uint256"
+      }
+    ],
+    "name": "Delegate",
+    "type": "event"
+  }
+]
