@@ -7,17 +7,22 @@ import { useWriteContract } from 'wagmi';
 import { getAddress } from 'viem';
 import abi from '../utils/NFTabi.json';
 import { useMintParams } from "../hooks/mintParams";
+import { LEVEL_TO_NAME } from '../lib/scoreLib';
 
 if (!import.meta.env.VITE_SC_ADDRESS) {
   throw new Error('REACT_APP_SC_ADDRESS not set in .env');
 }
 
-const MintButton = () => {
+interface MintButtonParams {
+  address: string
+  totalScore: number
+}
+
+const MintButton = ({ address, totalScore }: MintButtonParams) => {
   const { isLoggedIn } = useContext(AuthContext);
-  const address = '0x7D01abEdFD20BFdFDef2EBF2Ba1a42Ea2179160b'; // TODO: get user address from context
   const [loading, setLoading] = useState(false);
   const { data: hash, writeContract, isSuccess, isError, error } = useWriteContract();
-  const { canMint, messageHash, signature, level } = useMintParams();
+  const { canMint, messageHash, signature, level } = useMintParams({ address, totalScore });
 
 
   const mint = async () => {
@@ -31,10 +36,16 @@ const MintButton = () => {
     })
   };
 
+  if (level <= 0) {
+    return (
+      <p> Make more transaction to mint a NFT</p>
+    )
+  }
+
   return (
     <>
       <Button onClick={mint} disabled={!isLoggedIn || !canMint || isSuccess}>
-        Mint NFT
+        Mint {LEVEL_TO_NAME[level]} NFT
       </Button>
       {loading && <p>Minting...</p>}
       {
