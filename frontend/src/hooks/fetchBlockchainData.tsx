@@ -3,8 +3,11 @@
 import { useEffect, useState } from 'react';
 import { fetchAndFilterEvents, getTotalTransactionsaddress } from '../lib/flareConnector';
 
-export const useFlareData = () => {
-  const address = '0xA745Cc25C9E5BB2672D26B58785f6884eF50F2c6'; // TODO: get user address from context
+interface useFlareDataParams {
+  address: string
+}
+
+export const useFlareData = ({ address }: useFlareDataParams) => {
   const [wrappedAmount, setWrappedAmount] = useState(0);
   const [totalTransactions, setTotalTransactions] = useState(0);
   const [loading, setLoading] = useState(true);

@@ -1,9 +1,20 @@
-import { useFlareData } from '../hooks/fetchBlockchainData';
 import { Box, Heading } from '@chakra-ui/react';
-import { computeDefaultScoreChain, convertWeiToEther } from '../utils/score';
 
-export default function FlareData() {
-  const { wrappedAmount, totalTransactions, loading, error } = useFlareData();
+interface FlareDataParams {
+  wrappedAmount: number,
+  totalTransactions: number,
+  score: number
+  loading: boolean
+  error: any
+}
+
+export default function FlareData({
+  wrappedAmount,
+  totalTransactions,
+  loading,
+  error,
+  score
+}: FlareDataParams) {
 
   return (
     <Box>
@@ -13,9 +24,9 @@ export default function FlareData() {
 
       {!loading && !error &&
         <div>
-          <p>Wrapped Amount: {convertWeiToEther(wrappedAmount)} C2FLR</p>
+          <p>Wrapped Amount: {wrappedAmount} C2FLR</p>
           <p>Total Transactions: {totalTransactions}</p>
-          <p>Chain Score: {computeDefaultScoreChain(wrappedAmount, totalTransactions)}</p>
+          <p>Chain Score: {score}</p>
         </div>
       }
     </Box>

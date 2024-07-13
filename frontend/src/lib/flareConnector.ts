@@ -8,7 +8,6 @@ const chunkSize = 2000;
 export async function fetchAndFilterEvents(address: string) {
   const startBlock = 9797798; // You can specify the start block if needed
   const endBlock = await provider.getBlockNumber();
-  let events = [];
 
   let amount = 0;
 
@@ -24,7 +23,7 @@ export async function fetchAndFilterEvents(address: string) {
 
     const logs = await provider.getLogs(eventFilter);
     const iface = new ethers.utils.Interface(ContractAbi);
-    const parsedEvents = logs.map(log => {
+    logs.map(log => {
       try {
         const event = iface.parseLog(log);
         const args = event.args;

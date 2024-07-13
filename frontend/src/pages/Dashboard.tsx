@@ -1,15 +1,14 @@
 // create the component 
 import { Box, Heading } from '@chakra-ui/react';
-import MintButton from '../components/mintButton';
-import FlareData from '../components/FlareData';
+import ChainData from '../components/ChainData';
 
 const Dashboard = () => {
+
+
   return (
     <Box>
       <Heading>Dashboard</Heading>
-      <MintButton />
-
-      <FlareData />
+      <ChainData />
     </Box>
   );
 };
