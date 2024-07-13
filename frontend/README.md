@@ -3,3 +3,9 @@
 ## How it works ?
 
 ## How to run it ? 
+
+`cd frontend`
+
+`npm i`
+
+`npm run dev`
