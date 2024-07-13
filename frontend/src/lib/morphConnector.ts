@@ -52,11 +52,16 @@ export async function getTotalTransactionsCount(address: string | `0x${string}` 
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
+    if (!data.transactions_count) {
+      console.log('No transactions found or unexpected response format.');
+      return 0;
+    }
     const txn_count = data.transactions_count;
     return txn_count;
   } catch (error: any) {
     console.error('Error fetching transactions:', error);
-    throw new Error(`Failed to fetch transactions for address ${address}: ${error.message}`);
+    //throw new Error(`Failed to fetch transactions for address ${address}: ${error.message}`);
+    return 0;
   }
 }
 
@@ -77,8 +82,7 @@ export async function getNFTCounts(address: string | `0x${string}` | undefined) 
     }
   } catch (error: any) {
     console.error('Error fetching transactions:', error);
-    throw new Error(`Failed to fetch NFTs for address ${address}: ${error.message}`);
+    //throw new Error(`Failed to fetch NFTs for address ${address}: ${error.message}`);
+    return 0;
   }
-
-  return nft_count;
 }

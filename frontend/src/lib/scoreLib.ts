@@ -7,11 +7,12 @@ const WEIGHTS = {
 // Adjust the number of points given for each chain, according to the token's value
 const CHAIN_COEFFICIENTS: { [key: string]: number } = {
   flare: 0.5,
-  morph: 1000
+  morph: 1000,
+  scroll: 1000
 }
 
-const MIN_SCORE_FOR_LEVEL: { [key: number]: number } = {
-  1: 42,
+export const MIN_SCORE_FOR_LEVEL: { [key: number]: number } = {
+  1: 45,
   2: 80,
   3: 120,
 };

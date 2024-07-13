@@ -39,6 +39,7 @@ export const useBlockchainData = ({
         }
         if (getTotalTransactionsCount) {
           const totalTransactions = await getTotalTransactionsCount(address);
+          console.log('Total transactions:', totalTransactions);
           setTotalTransactions(totalTransactions);
         }
       } catch (error: any) {

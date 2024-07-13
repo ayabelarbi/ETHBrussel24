@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useConnect, useAccount } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 import { computeDefaultScoreChain, convertWeiToEther } from '../lib/scoreLib';
 import {
@@ -13,9 +13,24 @@ import {
   getTotalTransactionsCount as getFlareTx
 } from '../lib/flareConnector';
 
+import {
+  fetchBridgeTransactions as getScrollBridged,
+  fetchTransactions as getScrollTx
+} from '../lib/scrollConnector';
+
 import { useBlockchainData } from '../hooks/fetchBlockchainData';
 
-import { Box, Heading } from '@chakra-ui/react';
+import {
+  Box,
+  Container,
+  Heading,
+  Grid,
+  GridItem,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatGroup
+} from '@chakra-ui/react';
 import MintButton from './MintButton';
 import ChainDataDisplay from './ChainDataDisplay';
 
@@ -26,6 +41,7 @@ const ChainData = () => {
   const [scorePerChain, setScorePerChain] = useState({
     'flare': 0,
     'morph': 0,
+    'scroll': 0
   })
 
   // FLARE data
@@ -54,6 +70,19 @@ const ChainData = () => {
     getNFTCounts: getMorphNFTs
   });
 
+  // SCROLL DATA
+  const {
+    wrappedAmount: scrollWrapped,
+    totalTransactions: scrollTransactions,
+    totalNFTs: scrollNFTs,
+    loading: scrollLoading,
+    error: scrollError
+  } = useBlockchainData({
+    address,
+    getTotalAmountBridged: getScrollBridged,
+    getTotalTransactionsCount: getScrollTx,
+  });
+
   // compute flare score
   useEffect(() => {
     scorePerChain.flare = computeDefaultScoreChain('flare', flareWrapped, flareTransactions, 0);
@@ -68,13 +97,20 @@ const ChainData = () => {
     computeTotalScore();
   }, [morphWrapped, morphTransactions]);
 
+  // compute scroll score
+  useEffect(() => {
+    scorePerChain.scroll = computeDefaultScoreChain('scroll', scrollWrapped, scrollTransactions, scrollNFTs);
+    setScorePerChain(scorePerChain);
+    computeTotalScore();
+  }, [scrollWrapped, scrollTransactions]);
+
   const computeTotalScore = () => {
     const total = Object.values(scorePerChain).reduce((acc, score) => acc + score, 0);
     setTotalScore(total);
   };
 
   return (
-    <Box>
+    <Box px='16'>
       <div>
         {
           address
@@ -84,33 +120,56 @@ const ChainData = () => {
       </div>
       <Heading>Chain data</Heading>
       <div>
-        <h2>Total score</h2>
-        <p>{Math.round(totalScore)}</p>
+        <StatGroup>
+          <Stat>
+            <StatLabel>Total Score</StatLabel>
+            <StatNumber>{Math.round(totalScore)}</StatNumber>
+          </Stat>
+
+          <Stat>
+            <MintButton address={address} totalScore={totalScore} />
+          </Stat>
+
+        </StatGroup>
       </div>
-      {
-        address &&
-        <MintButton address={address} totalScore={totalScore} />
-      }
-      <ChainDataDisplay
-        chainName='Flare'
-        chainTiker='C2FLR'
-        wrappedAmount={convertWeiToEther(flareWrapped)}
-        totalTransactions={flareTransactions}
-        NFTCount={0}
-        loading={flareLoading}
-        error={flareError}
-        score={scorePerChain.flare}
-      />
-      <ChainDataDisplay
-        chainName='Morph'
-        chainTiker='ETH'
-        wrappedAmount={convertWeiToEther(morphWrapped)}
-        totalTransactions={morphTransactions}
-        NFTCount={morphNFTs}
-        loading={morphLoading}
-        error={morphError}
-        score={scorePerChain.morph}
-      />
+      <Grid templateColumns='repeat(3, 1fr)' gap={6}>
+        <GridItem w='100%'>
+          <ChainDataDisplay
+            chainName='Flare'
+            chainTiker='C2FLR'
+            wrappedAmount={convertWeiToEther(flareWrapped)}
+            totalTransactions={flareTransactions}
+            NFTCount={0}
+            loading={flareLoading}
+            error={flareError}
+            score={scorePerChain.flare}
+          />
+        </GridItem>
+        <GridItem w='100%' >
+          <ChainDataDisplay
+            chainName='Morph'
+            chainTiker='ETH'
+            wrappedAmount={convertWeiToEther(morphWrapped)}
+            totalTransactions={morphTransactions}
+            NFTCount={morphNFTs}
+            loading={morphLoading}
+            error={morphError}
+            score={scorePerChain.morph}
+          />
+        </GridItem>
+        <GridItem w='100%'>
+          <ChainDataDisplay
+            chainName='Scroll'
+            chainTiker='SCRL'
+            wrappedAmount={convertWeiToEther(scrollWrapped)}
+            totalTransactions={scrollTransactions}
+            NFTCount={scrollNFTs}
+            loading={scrollLoading}
+            error={scrollError}
+            score={scorePerChain.scroll}
+          />
+        </GridItem>
+      </Grid>
     </Box>
   );
 }

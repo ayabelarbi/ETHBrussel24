@@ -57,6 +57,7 @@ export async function getTotalTransactionsCount(address: string | `0x${string}` 
       return 0;
     }
   } catch (error: any) {
-    throw new Error(`Failed to fetch Flare transactions for address ${address}: ${error.message}`);
+    //throw new Error(`Failed to fetch Flare transactions for address ${address}: ${error.message}`);
+    return 0;
   }
 }

@@ -4,9 +4,14 @@ import { useWriteContract } from 'wagmi';
 import { getAddress } from 'viem';
 import abi from '../utils/NFTabi.json';
 import { useMintParams } from "../hooks/mintParams";
-import { LEVEL_TO_NAME } from '../lib/scoreLib';
+import { LEVEL_TO_NAME, MIN_SCORE_FOR_LEVEL } from '../lib/scoreLib';
 
-import { Button } from "@chakra-ui/react";
+import {
+  Button,
+  CircularProgress,
+  CircularProgressLabel,
+  Flex
+} from "@chakra-ui/react";
 
 if (!import.meta.env.VITE_SC_ADDRESS) {
   throw new Error('REACT_APP_SC_ADDRESS not set in .env');
@@ -42,14 +47,20 @@ const MintButton = ({ address, totalScore }: MintButtonParams) => {
   };
 
   if (level <= 0) {
+    const perc = Math.floor((totalScore * 100) / MIN_SCORE_FOR_LEVEL[level + 1]);
     return (
-      <p> Make more transactions to mint a NFT</p>
+      <Flex align='center' gap='6'>
+        <p> Make more transactions to mint a NFT</p>
+        <CircularProgress value={perc} max={100} color='green.400'>
+          <CircularProgressLabel>{perc} %</CircularProgressLabel>
+        </CircularProgress>
+      </Flex>
     )
   }
 
   return (
     <>
-      <Button onClick={mint} disabled={!isLoggedIn || !canMint || isSuccess}>
+      <Button onClick={mint} disabled={!canMint || isSuccess}>
         Mint {nftName} NFT
       </Button>
       {loading && !isSuccess && <p>Minting...</p>}
