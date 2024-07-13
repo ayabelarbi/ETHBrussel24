@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useConnect, useAccount, useDisconnect } from 'wagmi';
+import { injected } from 'wagmi/connectors'
+
 import { computeDefaultScoreChain, convertWeiToEther } from '../lib/scoreLib';
 import { useFlareData } from '../hooks/fetchBlockchainData';
 
@@ -8,7 +11,9 @@ import FlareData from './FlareData';
 
 
 const ChainData = () => {
-  const address = '0xA745Cc25C9E5BB2672D26B58785f6884eF50F2c6'; // TODO: get user address from context
+  const { address } = useAccount();
+  const { connect } = useConnect();
+  const { disconnect } = useDisconnect();
   const [totalScore, setTotalScore] = useState(0);
   const [scorePerChain, setScorePerChain] = useState({
     'flare': 0
@@ -35,12 +40,22 @@ const ChainData = () => {
 
   if (flareLoading) {
     return (
-      <p>Loading...</p>
+      <>
+        <p>Loading...</p>
+        <>{flareError}</>
+      </>
     )
   }
 
   return (
     <Box>
+      <div>
+        {
+          address
+            ? <p>Connected account: {address} <button onClick={() => disconnect()}>Disconnect</button></p>
+            : <p>Connect your wallet to see your chain data <button onClick={() => connect({ connector: injected() })}> Connect </button></p>
+        }
+      </div>
       <Heading>Chain data</Heading>
       <div>
         <h2>Total score</h2>

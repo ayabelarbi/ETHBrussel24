@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { fetchAndFilterEvents, getTotalTransactionsaddress } from '../lib/flareConnector';
 
 interface useFlareDataParams {
-  address: string
+  address: `0x${string}` | undefined
 }
 
 export const useFlareData = ({ address }: useFlareDataParams) => {
@@ -15,6 +15,10 @@ export const useFlareData = ({ address }: useFlareDataParams) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!address) {
+        setLoading(false);
+        return;
+      }
       setLoading(true);
       try {
         const wrappedAmount = await fetchAndFilterEvents(address);
@@ -26,7 +30,6 @@ export const useFlareData = ({ address }: useFlareDataParams) => {
       }
       setLoading(false);
     };
-
     fetchData();
   }, [address]);
 

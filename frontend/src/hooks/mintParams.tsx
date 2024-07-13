@@ -10,7 +10,7 @@ if (!signerPrivateKey) {
 const signer = new ethers.Wallet(signerPrivateKey);
 
 interface MintParams {
-  address: string
+  address: `0x${string}` | undefined
   totalScore: number
 }
 
@@ -40,7 +40,7 @@ export const useMintParams = ({ address, totalScore }: MintParams) => {
     const _canMint = canMintForLevel(_level);
     setCanMint(_canMint);
     if (_canMint) {
-      const { messageHash, signature } = await signClaim(level);
+      const { messageHash, signature } = await signClaim(_level);
       setMessageHash(messageHash);
       setSignature(signature);
     }

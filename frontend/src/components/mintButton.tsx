@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import { Button } from "@chakra-ui/react";
 import { AuthContext } from "../main";
 
@@ -14,7 +13,7 @@ if (!import.meta.env.VITE_SC_ADDRESS) {
 }
 
 interface MintButtonParams {
-  address: string
+  address: `0x${string}` | undefined
   totalScore: number
 }
 
@@ -58,6 +57,10 @@ const MintButton = ({ address, totalScore }: MintButtonParams) => {
           <p>Failed to mint NFT</p>
           <p>{error.message} {error.name}</p>
         </>
+      }
+      {
+        isSuccess &&
+        <p>NFT minted successfully</p>
       }
     </>
   );
