@@ -19,10 +19,11 @@ import {
 } from '../lib/scrollConnector';
 
 import { useBlockchainData } from '../hooks/fetchBlockchainData';
+import { useGetNFTs } from '../hooks/getNFTs';
+import NFTCard from './NFTCard';
 
 import {
   Box,
-  Container,
   Heading,
   Grid,
   GridItem,
@@ -43,6 +44,8 @@ const ChainData = () => {
     'morph': 0,
     'scroll': 0
   })
+
+  const { nfts } = useGetNFTs({ address });
 
   // FLARE data
   const {
@@ -170,6 +173,22 @@ const ChainData = () => {
           />
         </GridItem>
       </Grid>
+
+      <Box mt='8'>
+        <Heading size='md' my='4'>Your Trust Score NFTs</Heading>
+        {
+          nfts.length === 0 ?
+            <Box>Make transactions to get trusted NFTs</Box> :
+            <Grid templateColumns='repeat(6, 1fr)' gap={6}>
+              {
+                nfts.map((nft, idx) => (
+                  <GridItem w='100%' key={idx} >
+                    <NFTCard tokenId={nft.tokenId} />
+                  </GridItem>
+                ))
+              }
+            </Grid>}
+      </Box>
     </Box>
   );
 }

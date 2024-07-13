@@ -1,26 +1,20 @@
 import { useEffect, useState } from 'react';
 
-export const useGetNFTs = () => {
-  const [nfts, setNFTs] = useState<any[]>([]);
+import { getAddressNFTs } from '../lib/zeroNetworkConnector';
 
+
+export const useGetNFTs = ({ address }: { address: `0x${string}` | undefined }) => {
+  const [nfts, setNFTs] = useState<any[]>([]);
   useEffect(() => {
     const fetchNFTs = async () => {
-      const options = {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          authorization: 'Basic emtfZGV2X2I5YTgzYTI2M2IzYjQyZjU4NWU3MGI1NmFkMjJmMGNhOg=='
-        }
-      };
-      const response = await fetch(
-        'https://api.zerion.io/v1/nfts/?currency=usd',
-        options);
-      const data = await response.json();
-      setNFTs(data);
+      const nfts = await getAddressNFTs(address);
+      if (typeof nfts !== 'undefined') {
+        setNFTs(nfts);
+      }
     };
 
     fetchNFTs();
-  }, []);
+  }, [address]);
 
-  return nfts;
+  return { nfts };
 }
