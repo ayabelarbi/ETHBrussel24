@@ -1,12 +1,12 @@
-import { useState, useContext } from "react";
-import { Button } from "@chakra-ui/react";
-import { AuthContext } from "../main";
+import { useState, useEffect } from "react";
 
 import { useWriteContract } from 'wagmi';
 import { getAddress } from 'viem';
 import abi from '../utils/NFTabi.json';
 import { useMintParams } from "../hooks/mintParams";
 import { LEVEL_TO_NAME } from '../lib/scoreLib';
+
+import { Button } from "@chakra-ui/react";
 
 if (!import.meta.env.VITE_SC_ADDRESS) {
   throw new Error('REACT_APP_SC_ADDRESS not set in .env');
@@ -18,11 +18,17 @@ interface MintButtonParams {
 }
 
 const MintButton = ({ address, totalScore }: MintButtonParams) => {
-  const { isLoggedIn } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const [nftName, setNftName] = useState('');
   const { data: hash, writeContract, isSuccess, isError, error } = useWriteContract();
-  const { canMint, messageHash, signature, level } = useMintParams({ address, totalScore });
+  const { canMint, messageHash, signature, level } = useMintParams({ address, totalScore })
 
+  useEffect(() => {
+    if (level <= 0) {
+      return;
+    }
+    setNftName(LEVEL_TO_NAME[level]);
+  }, [level]);
 
   const mint = async () => {
     setLoading(true);
@@ -37,16 +43,16 @@ const MintButton = ({ address, totalScore }: MintButtonParams) => {
 
   if (level <= 0) {
     return (
-      <p> Make more transaction to mint a NFT</p>
+      <p> Make more transactions to mint a NFT</p>
     )
   }
 
   return (
     <>
       <Button onClick={mint} disabled={!isLoggedIn || !canMint || isSuccess}>
-        Mint {LEVEL_TO_NAME[level]} NFT
+        Mint {nftName} NFT
       </Button>
-      {loading && <p>Minting...</p>}
+      {loading && !isSuccess && <p>Minting...</p>}
       {
         hash &&
         <p>Transaction hash: {hash}</p>

@@ -1,15 +1,23 @@
 // TODO: move this script to a backend service
 
 import { useEffect, useState } from 'react';
-import { fetchAndFilterEvents, getTotalTransactionsaddress } from '../lib/flareConnector';
 
-interface useFlareDataParams {
-  address: `0x${string}` | undefined
+interface useDataParams {
+  address: `0x${string}` | undefined,
+  getTotalAmountBridged?: (address: string | `0x${string}` | undefined) => Promise<number>,
+  getTotalTransactionsCount?: (address: string | `0x${string}` | undefined) => Promise<number>
+  getNFTCounts?: (address: string | `0x${string}` | undefined) => Promise<number>
 }
 
-export const useFlareData = ({ address }: useFlareDataParams) => {
+export const useBlockchainData = ({
+  address,
+  getTotalAmountBridged,
+  getTotalTransactionsCount,
+  getNFTCounts
+}: useDataParams) => {
   const [wrappedAmount, setWrappedAmount] = useState(0);
   const [totalTransactions, setTotalTransactions] = useState(0);
+  const [totalNFTs, setTotalNFTs] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -21,10 +29,18 @@ export const useFlareData = ({ address }: useFlareDataParams) => {
       }
       setLoading(true);
       try {
-        const wrappedAmount = await fetchAndFilterEvents(address);
-        const totalTransactions = await getTotalTransactionsaddress(address);
-        setWrappedAmount(wrappedAmount);
-        setTotalTransactions(totalTransactions);
+        if (getNFTCounts) {
+          const totalNFTs = await getNFTCounts(address);
+          setTotalNFTs(totalNFTs);
+        }
+        if (getTotalAmountBridged) {
+          const wrappedAmount = await getTotalAmountBridged(address);
+          setWrappedAmount(wrappedAmount);
+        }
+        if (getTotalTransactionsCount) {
+          const totalTransactions = await getTotalTransactionsCount(address);
+          setTotalTransactions(totalTransactions);
+        }
       } catch (error: any) {
         setError(error);
       }
@@ -33,5 +49,5 @@ export const useFlareData = ({ address }: useFlareDataParams) => {
     fetchData();
   }, [address]);
 
-  return { wrappedAmount, totalTransactions, loading, error };
+  return { wrappedAmount, totalTransactions, totalNFTs, loading, error };
 }

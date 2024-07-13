@@ -9,7 +9,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 
-import {useState} from "react"; 
+import { useState } from "react";
 
 
 import { usePrivy, User } from "@privy-io/react-auth";
@@ -20,16 +20,16 @@ interface ConnectionCardProps {
 }
 
 const ConnectionCard: React.FC<ConnectionCardProps> = ({ setIsSuccess }) => {
-  const { login, authenticated, user } = usePrivy();
+  const { login, authenticated, user, logout } = usePrivy();
 
   const [connectedUser, setConnectedUser] = useState<User | null>(null);
-  
+
   const connectPrivy = () => {
     login();
     if (authenticated) {
-        setIsSuccess(true);
-        setConnectedUser(user)
-        console.log('user', user);
+      setIsSuccess(true);
+      setConnectedUser(user)
+      console.log('user', user);
     }
   };
 
@@ -58,6 +58,7 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({ setIsSuccess }) => {
         <Button onClick={connectWeb3Auth}>Web3Auth</Button>
         <Button onClick={connectDynamic}>Dynamic</Button>
         <Button onClick={connectWorldcoin}>Worldcoin</Button>
+        <Button onClick={logout}>Logout</Button>
       </VStack>
 
       <Center>

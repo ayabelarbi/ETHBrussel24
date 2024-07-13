@@ -1,12 +1,19 @@
 const WEIGHTS = {
   amountWrapped: 0.7,
-  numberTransactions: 0.3
+  numberTransactions: 0.3,
+  nftCount: 0.5
+}
+
+// Adjust the number of points given for each chain, according to the token's value
+const CHAIN_COEFFICIENTS: { [key: string]: number } = {
+  flare: 0.5,
+  morph: 1000
 }
 
 const MIN_SCORE_FOR_LEVEL: { [key: number]: number } = {
-  1: 20,
-  2: 50,
-  3: 100,
+  1: 42,
+  2: 80,
+  3: 120,
 };
 
 export const LEVEL_TO_NAME: { [key: number]: string } = {
@@ -15,8 +22,13 @@ export const LEVEL_TO_NAME: { [key: number]: string } = {
   3: 'Degen',
 };
 
-export function computeDefaultScoreChain(amountWrapped: number, numberTransactions: number) {
-  return convertWeiToEther(amountWrapped) * WEIGHTS.amountWrapped + numberTransactions * WEIGHTS.numberTransactions;
+
+export function computeDefaultScoreChain(chain: string, amountWrapped: number, numberTransactions: number, numberNFTs: number) {
+  return (
+    convertWeiToEther(amountWrapped) * WEIGHTS.amountWrapped * CHAIN_COEFFICIENTS[chain] +
+    numberTransactions * WEIGHTS.numberTransactions +
+    numberNFTs * WEIGHTS.nftCount
+  );
 }
 
 export function convertWeiToEther(wei: number) {
@@ -25,10 +37,9 @@ export function convertWeiToEther(wei: number) {
 
 export async function getLevel(score: number) {
   let level = 0;
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 3; i > 0; i--) {
     if (score >= MIN_SCORE_FOR_LEVEL[i]) {
       level = i;
-    } else {
       break;
     }
   }

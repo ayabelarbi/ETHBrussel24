@@ -5,7 +5,7 @@ const contractAddress = '0xC67DCE33D7A8efA5FfEB961899C73fe01bCe9273';
 const provider = new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/flare_coston2/7c66d8fb2d926f141f7fd511165a470c2ff3495f699afa835a4fd7f2f3bfb976');
 const chunkSize = 2000;
 
-export async function fetchAndFilterEvents(address: string | `0x${string}` | undefined) {
+export async function getTotalAmountBridged(address: string | `0x${string}` | undefined) {
   if (!address) {
     return 0;
   }
@@ -41,7 +41,7 @@ export async function fetchAndFilterEvents(address: string | `0x${string}` | und
   return amount;
 }
 
-export async function getTotalTransactionsaddress(address: string | `0x${string}` | undefined) {
+export async function getTotalTransactionsCount(address: string | `0x${string}` | undefined) {
   if (!address) {
     return 0;
   }

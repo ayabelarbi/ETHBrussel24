@@ -22,7 +22,6 @@ export const useMintParams = ({ address, totalScore }: MintParams) => {
   const [level, setLevel] = useState(0);
 
   function canMintForLevel(level: number) {
-    //TODO: check if user already has a token for this level
     return level > 0;
   }
 
