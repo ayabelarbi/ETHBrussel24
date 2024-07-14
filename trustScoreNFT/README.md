@@ -5,6 +5,11 @@ This project is built using Hardhat, a development environment to compile, deplo
 ## Features
 
 - NFT smart contract to reward users with NFTs for reaching a certain DeFi trust score
+- This is a Soulbound token, meaning it cannot be transferred to another wallet
+- The smart contract has 3 score levels:
+   - **Explorer NFT** for beginners.
+  - **Adventurer NFT** for intermediate users.
+  - **DeFi Degen NFT** for advanced users.
 
 
 ## Prerequisites
