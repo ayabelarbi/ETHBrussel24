@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
+    "@circles-sdk/data": "^0.4.0",
+    "@circles-sdk/sdk": "^0.4.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@privy-io/react-auth": "^1.74.1",

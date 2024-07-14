@@ -15,7 +15,8 @@ import {
 
 import {
   fetchBridgeTransactions as getScrollBridged,
-  fetchTransactions as getScrollTx
+  fetchTransactions as getScrollTx,
+  fetchNFTCounts as getScrollNFTs,
 } from '../lib/scrollConnector';
 
 import { useBlockchainData } from '../hooks/fetchBlockchainData';
@@ -32,7 +33,6 @@ import {
   StatNumber,
   StatGroup
 } from '@chakra-ui/react';
-import MintButton from './MintButton';
 import ChainDataDisplay from './ChainDataDisplay';
 
 
@@ -84,6 +84,7 @@ const ChainData = () => {
     address,
     getTotalAmountBridged: getScrollBridged,
     getTotalTransactionsCount: getScrollTx,
+    getNFTCounts: getScrollNFTs
   });
 
   // compute flare score
@@ -113,7 +114,7 @@ const ChainData = () => {
   };
 
   return (
-    <Box px='16'>
+    <Box>
       <div>
         {
           address
@@ -121,23 +122,19 @@ const ChainData = () => {
             : <p>GO to the Login page!</p>
         }
       </div>
-      <Heading>Chain data</Heading>
+      <Heading py='8'>Chain data</Heading>
       <div>
         <StatGroup>
           <Stat>
             <StatLabel>Total Score</StatLabel>
             <StatNumber>{Math.round(totalScore)}</StatNumber>
           </Stat>
-
-          <Stat>
-            <MintButton address={address} totalScore={totalScore} />
-          </Stat>
-
         </StatGroup>
       </div>
       <Grid templateColumns='repeat(3, 1fr)' gap={6}>
         <GridItem w='100%'>
           <ChainDataDisplay
+            address={address}
             chainName='Flare'
             chainTiker='C2FLR'
             wrappedAmount={convertWeiToEther(flareWrapped)}
@@ -150,6 +147,7 @@ const ChainData = () => {
         </GridItem>
         <GridItem w='100%' >
           <ChainDataDisplay
+            address={address}
             chainName='Morph'
             chainTiker='ETH'
             wrappedAmount={convertWeiToEther(morphWrapped)}
@@ -162,6 +160,7 @@ const ChainData = () => {
         </GridItem>
         <GridItem w='100%'>
           <ChainDataDisplay
+            address={address}
             chainName='Scroll'
             chainTiker='SCRL'
             wrappedAmount={convertWeiToEther(scrollWrapped)}
@@ -178,12 +177,12 @@ const ChainData = () => {
         <Heading size='md' my='4'>Your Trust Score NFTs</Heading>
         {
           nfts.length === 0 ?
-            <Box>Make transactions to get trusted NFTs</Box> :
+            <Box>Perform transactions to get trusted NFTs</Box> :
             <Grid templateColumns='repeat(6, 1fr)' gap={6}>
               {
                 nfts.map((nft, idx) => (
                   <GridItem w='100%' key={idx} >
-                    <NFTCard tokenId={nft.tokenId} />
+                    <NFTCard tokenId={nft.tokenId} contractAddress={nft.contractAddress} />
                   </GridItem>
                 ))
               }

@@ -12,15 +12,13 @@ import {
   CardBody,
 } from '@chakra-ui/react';
 
-const contractAddress = import.meta.env.VITE_SC_ADDRESS as string;
-
 interface metadata {
   name: string,
   description: string,
   image: string
 }
 
-const NFTCard = ({ tokenId }: { tokenId: number }) => {
+const NFTCard = ({ tokenId, contractAddress }: { tokenId: number, contractAddress: string }) => {
   const [metadata, setMetadata] = useState<metadata>();
   const { data, error } = useReadContract({
     abi: NFTAbi,
