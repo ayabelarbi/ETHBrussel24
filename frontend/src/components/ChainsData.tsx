@@ -3,6 +3,8 @@ import { useAccount } from "wagmi";
 
 import { Button, HStack, VStack, Text } from "@chakra-ui/react";
 
+import PieCards from "./PieCards";
+
 import { computeDefaultScoreChain, convertWeiToEther } from "../lib/scoreLib";
 import {
   getTotalAmountBridged as getMorphBridged,
@@ -347,6 +349,8 @@ const ChainData = () => {
             score={scorePerChain.morph}
           />
         </GridItem>
+
+        <PieCards/>
       </Grid>
 
       <Box mt="8">
