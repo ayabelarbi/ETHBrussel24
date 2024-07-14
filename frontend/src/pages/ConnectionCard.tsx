@@ -11,13 +11,9 @@ import {
 
 import { useConnect, useAccount} from 'wagmi';
 
-import {useState} from "react"; 
+import { usePrivy } from "@privy-io/react-auth";
 
-import { usePrivy, User } from "@privy-io/react-auth";
-import { IProvider } from "@web3auth/base";
-
-
-import {zeroNetworktestnet } from "../lib/wagmi";
+import { zeroNetworktestnet } from "../lib/wagmi";
 import web3AuthInstance from "../hooks/connectWithWeb3Auth";
 interface ConnectionCardProps {
   setIsSuccess: (value: boolean) => void;
@@ -25,19 +21,14 @@ interface ConnectionCardProps {
 
 const ConnectionCard: React.FC<ConnectionCardProps> = ({ setIsSuccess }) => {
   const { login, authenticated, user, logout } = usePrivy();
-
-  const [connectedUser, setConnectedUser] = useState<User | null>(null);
   
-  const { address, connector, isConnected } = useAccount();
-  const { connect, connectors, error } = useConnect();
+  const { isConnected } = useAccount();
+  const { connect} = useConnect();
 
-
-  
   const connectPrivy = () => {
     login();
     if (authenticated) {
       setIsSuccess(true);
-      setConnectedUser(user)
       console.log('user', user);
     }
   };

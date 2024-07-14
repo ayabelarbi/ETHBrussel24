@@ -13,15 +13,6 @@ import Dashboard from "./pages/Dashboard";
 
 import { PrivyProvider } from '@privy-io/react-auth';
 
-import { privateKeyProvider } from "./utils/privateKeyProviders";
-
-// import { ADAPTER_EVENTS, IProvider } from "@web3auth/base";
-// import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
-
-
-// const clientId = "BAoB4eLxa6edFP3ti85pbvLiSpSmuB8N_IdLlSA7YUNk1jEs7DKv928JRIleLBHh0pC08qkIaRp2Bj8SEgAnvcA";
-// const verifier = "w3a-firebase-demo";
-
 export const AuthContext = createContext<any>(null);
 const queryClient = new QueryClient();
 
