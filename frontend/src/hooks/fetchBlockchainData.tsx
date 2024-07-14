@@ -31,6 +31,7 @@ export const useBlockchainData = ({
       try {
         if (getNFTCounts) {
           const totalNFTs = await getNFTCounts(address);
+          console.log('Total NFTs:', totalNFTs);
           setTotalNFTs(totalNFTs);
         }
         if (getTotalAmountBridged) {

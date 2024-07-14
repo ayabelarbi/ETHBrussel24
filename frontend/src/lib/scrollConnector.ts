@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 const API_URL = 'https://api-sepolia.scrollscan.com/api';
 const API_KEY = 'KBF7XQWUU6BN1AKB197IGKCMGXNNHWA2BQ';  // Replace with your actual API key
 
@@ -40,4 +41,31 @@ export async function fetchTransactions(address: string | `0x${string}` | undefi
     console.error('Error fetching transactions:', error);
     return 0;
   }
+}
+
+
+export async function getAddressNFTs(address: string | `0x${string}` | undefined) {
+  if (!address) {
+    return 0;
+  }
+  try {
+    const response = await fetch(`${API_URL}?module=account&action=txlistinternal&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=${API_KEY}`);
+    const data = await response.json();
+    const transactions = data.result;
+    console.log('>>>>', transactions);
+    // Filter transactions from the null address for the minted NFTs
+    const filteredTransactions = transactions.filter((tx: any) => tx.from.toLowerCase() === ethers.constants.AddressZero);
+    console.log(`Total NFTs minted: ${filteredTransactions.length}`);
+    console.log(filteredTransactions);
+    return filteredTransactions;
+  } catch (error) {
+    console.error('Error fetching transactions:', error);
+    return 0;
+  }
+}
+
+export async function fetchNFTCounts(address: string | `0x${string}` | undefined) {
+  const nfts = await getAddressNFTs(address);
+  console.log(`Total NFTs: ${nfts.length}`);
+  return nfts.length;
 }

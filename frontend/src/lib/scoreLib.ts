@@ -12,9 +12,9 @@ const CHAIN_COEFFICIENTS: { [key: string]: number } = {
 }
 
 export const MIN_SCORE_FOR_LEVEL: { [key: number]: number } = {
-  1: 38,
-  2: 60,
-  3: 100,
+  1: 10,
+  2: 30,
+  3: 50,
 };
 
 export const LEVEL_TO_NAME: { [key: number]: string } = {

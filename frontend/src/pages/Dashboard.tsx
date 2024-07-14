@@ -7,8 +7,7 @@ const Dashboard = () => {
   return (
     <Flex direction="column" minHeight="100vh">
       <Navbar />
-      <Box flex="1">
-        <Heading>Dashboard</Heading>
+      <Box flex="1" px='16' py='4'>
         <ChainData />
       </Box>
       <Footer />

@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { switchChain } from '@wagmi/core';
+import { config } from '../lib/wagmi';
 
 import { useWriteContract } from 'wagmi';
 import { getAddress } from 'viem';
@@ -13,18 +15,14 @@ import {
   Flex
 } from "@chakra-ui/react";
 
-// if (!import.meta.env.VITE_SC_ADDRESS) {
-//   throw new Error('REACT_APP_SC_ADDRESS not set in .env');
-// }
-
-const VITE_SC_ADDRESS = "0x6561cca425483f2d36636427E94F3aA7Bd9b38A8"
-
 interface MintButtonParams {
   address: `0x${string}` | undefined
   totalScore: number
+  chainId: number
+  scAddress: string
 }
 
-const MintButton = ({ address, totalScore }: MintButtonParams) => {
+const MintButton = ({ address, totalScore, chainId, scAddress }: MintButtonParams) => {
   const [loading, setLoading] = useState(false);
   const [nftName, setNftName] = useState('');
   const { data: hash, writeContract, isSuccess, isError, error } = useWriteContract();
@@ -38,13 +36,23 @@ const MintButton = ({ address, totalScore }: MintButtonParams) => {
   }, [level]);
 
   const mint = async () => {
+    console.log('minting');
+    console.log('chainId', chainId);
+    console.log('scAddress', scAddress);
+    console.log('config', config);
+    await switchChain(config, { chainId })
+
     setLoading(true);
     writeContract({
+<<<<<<< HEAD
       address: getAddress(VITE_SC_ADDRESS),  // make sure to use 0x{string} format
+=======
+      address: getAddress(scAddress),  // make sure to use 0x{string} format
+>>>>>>> ef7d909 (feat: allow to mint an NFT on each chain)
       abi,
       functionName: 'mint',
       args: [address, messageHash, signature, level - 1], // /!\ the levels are 0-indexed (0, 1, 2) on the smart contract
-      chainId: 4457845 // zeroNetworktestnet
+      chainId: chainId
     })
   };
 
@@ -52,7 +60,7 @@ const MintButton = ({ address, totalScore }: MintButtonParams) => {
     const perc = Math.floor((totalScore * 100) / MIN_SCORE_FOR_LEVEL[level + 1]);
     return (
       <Flex align='center' gap='6'>
-        <p> Make more transactions to mint a NFT</p>
+        <p> Perform more transactions to be trusted on the network</p>
         <CircularProgress value={perc} max={100} color='green.400'>
           <CircularProgressLabel>{perc} %</CircularProgressLabel>
         </CircularProgress>
