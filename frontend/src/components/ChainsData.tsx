@@ -124,13 +124,13 @@ const ChainData = () => {
   return (
     <Box>
       <div>
-      {
-  address
-    ? <p>Connected account: {address}</p>
-    : user
-      ? <p>Connected account: {user.wallet?.address}</p>
-      : <p>Go to the Login page!</p>
-}
+        {
+          address
+            ? <p>Connected account: {address}</p>
+            : user
+              ? <p>Connected account: {user.wallet?.address}</p>
+              : <p>Go to the Login page!</p>
+        }
       </div>
       <Heading py='8'>Chain data</Heading>
       <Box py='4'>

@@ -1,7 +1,7 @@
 const WEIGHTS = {
   amountWrapped: 0.5,
   numberTransactions: 0.3,
-  tokensCount: 0.4
+  tokensCount: 2
 }
 
 // Adjust the number of points given for each chain, according to the token's value

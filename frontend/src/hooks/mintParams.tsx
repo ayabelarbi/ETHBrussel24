@@ -27,8 +27,8 @@ export const useMintParams = ({ address, totalScore }: MintParams) => {
 
   async function signClaim(level: number) {
     const message = `${address} claims token for level ${level}`;
-    const messageHash = ethers.utils.id(message);
-    const messageBytes = ethers.utils.arrayify(messageHash);
+    const messageHash = ethers.id(message);
+    const messageBytes = ethers.getBytes(messageHash);
     const signature = await signer.signMessage(messageBytes);
     return { messageHash, signature };
   }
