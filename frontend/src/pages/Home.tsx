@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   Box,
-  Heading,
-  Text,
+  Image,
   Button,
   useDisclosure,
   Modal,
@@ -16,8 +15,10 @@ import {
 } from "@chakra-ui/react";
 
 
+
 import ConnectionCard from "./ConnectionCard";
 import videoBg from "../assets/bg.mp4";
+import buzzHome from "../assets/BUZZ.gif";
 
 const Home = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -64,8 +65,8 @@ const Home = () => {
           }}
         />
         <Box position="relative" zIndex="2" textAlign="center">
-          <Heading>Home</Heading>
-          <Text>Welcome to Trust Score, The Reputation Layer for Web3</Text>
+          <Image src={buzzHome} alt="BUZZ" height="60%" />
+
           <Button onClick={connect}>Get Started</Button>
         </Box>
       </Box>

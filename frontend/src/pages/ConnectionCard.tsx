@@ -9,12 +9,16 @@ import {
   Center,
 } from "@chakra-ui/react";
 
-import {useState} from "react"; 
+import { useConnect, useAccount} from 'wagmi';
 
+import {useState, useEffect} from "react"; 
 
 import { usePrivy, User } from "@privy-io/react-auth";
-import { PrivyClient } from "@privy-io/server-auth";
+import { IProvider } from "@web3auth/base";
 
+
+import {zeroNetworktestnet } from "../lib/wagmi";
+import web3AuthInstance from "../hooks/connectWithWeb3Auth";
 interface ConnectionCardProps {
   setIsSuccess: (value: boolean) => void;
 }
@@ -23,6 +27,11 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({ setIsSuccess }) => {
   const { login, authenticated, user } = usePrivy();
 
   const [connectedUser, setConnectedUser] = useState<User | null>(null);
+  
+  const { address, connector, isConnected } = useAccount();
+  const { connect, connectors, error } = useConnect();
+
+
   
   const connectPrivy = () => {
     login();
@@ -33,10 +42,18 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({ setIsSuccess }) => {
     }
   };
 
-
   const connectWeb3Auth = () => {
     console.log("Connecting to Web3Auth");
     setIsSuccess(false);
+  
+    const connectorInstance = web3AuthInstance([zeroNetworktestnet]);
+
+    connect({
+      connector: connectorInstance }
+    )
+    if (isConnected) {
+      setIsSuccess(true);
+    }
   };
 
   const connectDynamic = () => {

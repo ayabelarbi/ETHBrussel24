@@ -1,5 +1,6 @@
 import { createConfig } from 'wagmi';
 import { http } from "viem";
+import Web3AuthConnectorInstance from '../hooks/connectWithWeb3Auth';
 
 export const zeroNetworktestnet = {
   id: 4457845,
@@ -19,9 +20,13 @@ export const zeroNetworktestnet = {
   },
 }
 
+
 export const config = createConfig({
   chains: [zeroNetworktestnet],
   transports: {
     [zeroNetworktestnet.id]: http("https://rpc.zerion.io/v1/zero-sepolia"),
   },
+  connectors: [
+    Web3AuthConnectorInstance([zeroNetworktestnet]),
+  ]
 })
