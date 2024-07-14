@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple DeFi App</title>
+    <link rel="icon" href="data:,">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fffbee;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #ffcc00;
+            text-shadow: 2px 2px #333;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #ffcc00;
+        }
+
+        .container {
+            background: #fff;
+            border: 2px solid #ffcc00;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ffcc00;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #ffcc00;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #ffd700;
+        }
+
+        .bee {
+            width: 50px;
+            height: 50px;
+            margin: 10px;
+            animation: buzz 2s infinite;
+        }
+
+        @keyframes buzz {
+            0% { transform: translateX(0) rotate(0); }
+            50% { transform: translateX(5px) rotate(10deg); }
+            100% { transform: translateX(0) rotate(0); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple DeFi Lending and Borrowing</h1>
+    <div class="container">
+        <h2>Deposit</h2>
+        <img src="https://img.icons8.com/emoji/48/000000/honeybee.png" class="bee"/>
+        <input type="text" id="depositAmount" placeholder="Amount in Ether">
+        <button onclick="deposit()">Deposit</button>
+    </div>
+    <div class="container">
+        <h2>Withdraw</h2>
+        <img src="https://img.icons8.com/emoji/48/000000/honeybee.png" class="bee"/>
+        <input type="text" id="withdrawAmount" placeholder="Amount in Ether">
+        <button onclick="withdraw()">Withdraw</button>
+    </div>
+    <div class="container">
+        <h2>Borrow</h2>
+        <img src="https://img.icons8.com/emoji/48/000000/honeybee.png" class="bee"/>
+        <input type="text" id="borrowAmount" placeholder="Amount in Ether">
+        <button onclick="borrow()">Borrow</button>
+    </div>
+    <div class="container">
+        <h2>Repay</h2>
+        <img src="https://img.icons8.com/emoji/48/000000/honeybee.png" class="bee"/>
+        <input type="text" id="repayAmount" placeholder="Amount in Ether">
+        <button onclick="repay()">Repay</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.5.4/dist/ethers.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
