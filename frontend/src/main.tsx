@@ -12,6 +12,8 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 
 import { PrivyProvider } from '@privy-io/react-auth';
+import {scrollSepolia} from 'viem/chains';
+
 
 export const AuthContext = createContext<any>(null);
 const queryClient = new QueryClient();
@@ -49,6 +51,8 @@ const App = () => {
             embeddedWallets: {
               createOnLogin: 'users-without-wallets',
             },
+            defaultChain: scrollSepolia,
+            supportedChains: [scrollSepolia],
           }}
 
         >
@@ -61,7 +65,7 @@ const App = () => {
                     <Route path="/" element={<Home />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     {isLoggedIn && <Route path="*" element={<NavigateToDashboard setIsLoggedIn={setIsLoggedIn} />} />}
-                  
+
 
                   </Routes>
                 </AuthContext.Provider>
