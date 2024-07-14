@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { useAccount } from "wagmi";
-
-import { Button, HStack, VStack, Text } from "@chakra-ui/react";
+import { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
+import { useAvatar } from '../hooks/useAvatar';
 
 import { computeDefaultScoreChain, convertWeiToEther } from "../lib/scoreLib";
 import {
@@ -30,6 +29,7 @@ import NFTCard from "./NFTCard";
 
 import {
   Box,
+  Button,
   Heading,
   Grid,
   GridItem,
@@ -37,6 +37,7 @@ import {
   StatLabel,
   StatNumber,
   StatGroup,
+  HStack, VStack, Text
 } from "@chakra-ui/react";
 import ChainDataDisplay from "./ChainDataDisplay";
 import { CHAIN_TO_NFT_ADDRESS, CHAIN_TO_ID } from "../globals";
@@ -63,6 +64,8 @@ const ChainData = () => {
     scroll: 0,
     sepolia: 0,
   });
+
+  const { avatar, registerAvatar } = useAvatar();
 
   const linkedAccountMethods = user?.linkedAccounts.map((account, index) => (
     <span
@@ -184,48 +187,28 @@ const ChainData = () => {
 
   // compute flare score
   useEffect(() => {
-    scorePerChain.flare = computeDefaultScoreChain(
-      "flare",
-      flareWrapped,
-      flareTransactions,
-      flareTokensCount
-    );
+    scorePerChain.flare = computeDefaultScoreChain('flare', flareWrapped, flareTransactions, flareTokensCount, avatar !== undefined);
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [flareWrapped, flareTransactions]);
 
   // compute morph score
   useEffect(() => {
-    scorePerChain.morph = computeDefaultScoreChain(
-      "morph",
-      morphWrapped,
-      morphTransactions,
-      morphTokensCount
-    );
+    scorePerChain.morph = computeDefaultScoreChain('morph', morphWrapped, morphTransactions, morphTokensCount, avatar !== undefined);
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [morphWrapped, morphTransactions]);
 
   // compute scroll score
   useEffect(() => {
-    scorePerChain.scroll = computeDefaultScoreChain(
-      "scroll",
-      scrollWrapped,
-      scrollTransactions,
-      scrollTokensCount
-    );
+    scorePerChain.scroll = computeDefaultScoreChain('scroll', scrollWrapped, scrollTransactions, scrollTokensCount, avatar !== undefined);
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [scrollWrapped, scrollTransactions]);
 
   // compute sepolia score
   useEffect(() => {
-    scorePerChain.sepolia = computeDefaultScoreChain(
-      "sepolia",
-      0,
-      sepoliaTransactions,
-      1
-    );
+    scorePerChain.sepolia = computeDefaultScoreChain('sepolia', 0, sepoliaTransactions, 1, avatar !== undefined);
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [sepoliaTransactions]);
@@ -285,8 +268,15 @@ const ChainData = () => {
 
         )}
       </div>
-      <Heading py="8">Chain data</Heading>
-      <Box py="4">
+      <div>
+        {
+          avatar
+            ? <p>Avatar registered as a {avatar.avatarInfo?.type}</p>
+            : <Button onClick={registerAvatar}>Get Avatar</Button>
+        }
+      </div>
+      <Heading py='8'>Chain data</Heading>
+      <Box py='4'>
         <StatGroup>
           <Stat>
             <StatLabel>Total Score</StatLabel>

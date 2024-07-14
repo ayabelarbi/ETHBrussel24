@@ -1,7 +1,8 @@
 const WEIGHTS = {
   amountWrapped: 0.5,
   numberTransactions: 0.3,
-  tokensCount: 2
+  tokensCount: 2,
+  hasAvatar: 5
 }
 
 // Adjust the number of points given for each chain, according to the token's value
@@ -25,11 +26,18 @@ export const LEVEL_TO_NAME: { [key: number]: string } = {
 };
 
 
-export function computeDefaultScoreChain(chain: string, amountWrapped: number, numberTransactions: number, numberTokens: number) {
+export function computeDefaultScoreChain(
+  chain: string,
+  amountWrapped: number,
+  numberTransactions: number,
+  numberTokens: number,
+  hasAvatar: boolean
+) {
   return (
     convertWeiToEther(amountWrapped) * WEIGHTS.amountWrapped * CHAIN_COEFFICIENTS[chain] +
     numberTransactions * WEIGHTS.numberTransactions +
-    numberTokens * WEIGHTS.tokensCount
+    numberTokens * WEIGHTS.tokensCount +
+    (hasAvatar ? WEIGHTS.hasAvatar / Object.keys(CHAIN_COEFFICIENTS).length : 0)  // devide by the number of chains as this is a chain score
   );
 }
 

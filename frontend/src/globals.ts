@@ -9,14 +9,15 @@ export const CHAIN_TO_STORE_ADDRESS: { [key: string]: string } = {
   flare: '0xa02BD5ffB4C50d3EC736E8B99c1114E23C60A1cd',
   morph: '0x1Ca3E37E16B165AdF44c1f29b1EBf74C486E9FA9',
   scroll: '0xB2C3Cf6Df77fC3aE2ff98Fb230a36e37A401f37e',
-  sepolia: ''
+  sepolia: '0x2BE2093c4dc663A0A865A0a5fd9268efEB3A1435'
 }
 
-import { scrollSepolia, flareTestnet, morphHolesky, sepolia } from 'viem/chains';
+import { scrollSepolia, flareTestnet, morphHolesky, sepolia, gnosisChiado } from 'viem/chains';
 
 export const CHAIN_TO_ID: { [key: string]: number } = {
   flare: flareTestnet.id,
   morph: morphHolesky.id,
   scroll: scrollSepolia.id,
-  sepolia: sepolia.id
+  sepolia: sepolia.id,
+  chiado: gnosisChiado.id
 }
