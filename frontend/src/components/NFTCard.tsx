@@ -18,26 +18,30 @@ interface metadata {
   image: string
 }
 
-const NFTCard = ({ tokenId, contractAddress }: { tokenId: number, contractAddress: string }) => {
+interface NFTCardParams {
+  tokenId: number,
+  contractAddress: string,
+  chainName: string
+  chainId: number
+}
+
+const NFTCard = ({ tokenId, contractAddress, chainName, chainId }: NFTCardParams) => {
   const [metadata, setMetadata] = useState<metadata>();
-  const { data, error } = useReadContract({
+  const reader = useReadContract({
     abi: NFTAbi,
     address: getAddress(contractAddress),
     functionName: 'tokenURI',
-    args: [tokenId]
+    args: [tokenId],
+    chainId: chainId
   });
 
   async function getMetadata(data: string) {
     try {
-      console.log(data);
       const fileName = data.slice(data.lastIndexOf('/') + 1);
       const cid = "bafybeigxgbskoabrc3twc3s6wvtevik762xo5vknyyv6maqx3rlfew2gm4"
       const url = `https://${cid}.ipfs.dweb.link/${fileName}`;
-      console.log(url);
       const response = await fetch(url);
-      console.log(response);
       let metadata: any = await response.json();
-      console.log(metadata);
       setMetadata(metadata);
     } catch (error: any) {
       console.error('Error fetching metadata:', error);
@@ -45,16 +49,24 @@ const NFTCard = ({ tokenId, contractAddress }: { tokenId: number, contractAddres
   }
 
   useEffect(() => {
-    if (data && typeof data === 'string') {
-      getMetadata(data);
+    if (reader.data && typeof reader.data === 'string') {
+      getMetadata(reader.data);
     }
-  }, [data]);
+  }, [reader.data]);
 
-  if (error) {
-    return <Text>Error: {error.message}</Text>;
+  useEffect(() => {
+    if ((!tokenId && tokenId !== 0) || !contractAddress) {
+      return;
+    }
+    reader.refetch();
+  }, [tokenId, contractAddress]);
+
+
+  if (reader?.error) {
+    return <Text>Error: {reader?.error.message}</Text>;
   }
 
-  if (!data) {
+  if (!reader.data) {
     return <Text>Loading...</Text>;
   }
 
@@ -69,7 +81,7 @@ const NFTCard = ({ tokenId, contractAddress }: { tokenId: number, contractAddres
         <Stack mt='6' spacing='3'>
           <Heading size='md'>{metadata?.name}</Heading>
           <Text>
-            {metadata?.description}
+            {metadata?.description} on {chainName}
           </Text>
         </Stack>
       </CardBody>

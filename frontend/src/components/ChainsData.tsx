@@ -16,7 +16,6 @@ import {
 import {
   fetchBridgeTransactions as getScrollBridged,
   fetchTransactions as getScrollTx,
-  fetchNFTCounts as getScrollNFTs,
 } from '../lib/scrollConnector';
 
 import { useBlockchainData } from '../hooks/fetchBlockchainData';
@@ -34,6 +33,7 @@ import {
   StatGroup
 } from '@chakra-ui/react';
 import ChainDataDisplay from './ChainDataDisplay';
+import { CHAIN_TO_SC_ADDRESS, CHAIN_TO_ID } from '../globals';
 
 
 const ChainData = () => {
@@ -45,7 +45,9 @@ const ChainData = () => {
     'scroll': 0
   })
 
-  const { nfts } = useGetNFTs({ address });
+  const { nfts: scrollNFTs } = useGetNFTs({ address, contractAddress: CHAIN_TO_SC_ADDRESS.scroll, chainId: CHAIN_TO_ID.scroll });
+  const { nfts: morphNFTs } = useGetNFTs({ address, contractAddress: CHAIN_TO_SC_ADDRESS.morph, chainId: CHAIN_TO_ID.morph });
+  const { nfts: flareNFTs } = useGetNFTs({ address, contractAddress: CHAIN_TO_SC_ADDRESS.flare, chainId: CHAIN_TO_ID.flare });
 
   // FLARE data
   const {
@@ -63,7 +65,7 @@ const ChainData = () => {
   const {
     wrappedAmount: morphWrapped,
     totalTransactions: morphTransactions,
-    totalNFTs: morphNFTs,
+    totalNFTs: morphNFTCount,
     loading: morphLoading,
     error: morphError
   } = useBlockchainData({
@@ -77,14 +79,13 @@ const ChainData = () => {
   const {
     wrappedAmount: scrollWrapped,
     totalTransactions: scrollTransactions,
-    totalNFTs: scrollNFTs,
+    totalNFTs: scrollNFTCount,
     loading: scrollLoading,
     error: scrollError
   } = useBlockchainData({
     address,
     getTotalAmountBridged: getScrollBridged,
     getTotalTransactionsCount: getScrollTx,
-    getNFTCounts: getScrollNFTs
   });
 
   // compute flare score
@@ -96,14 +97,14 @@ const ChainData = () => {
 
   // compute morph score
   useEffect(() => {
-    scorePerChain.morph = computeDefaultScoreChain('morph', morphWrapped, morphTransactions, morphNFTs);
+    scorePerChain.morph = computeDefaultScoreChain('morph', morphWrapped, morphTransactions, morphNFTCount);
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [morphWrapped, morphTransactions]);
 
   // compute scroll score
   useEffect(() => {
-    scorePerChain.scroll = computeDefaultScoreChain('scroll', scrollWrapped, scrollTransactions, scrollNFTs);
+    scorePerChain.scroll = computeDefaultScoreChain('scroll', scrollWrapped, scrollTransactions, scrollNFTCount);
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [scrollWrapped, scrollTransactions]);
@@ -123,14 +124,14 @@ const ChainData = () => {
         }
       </div>
       <Heading py='8'>Chain data</Heading>
-      <div>
+      <Box py='4'>
         <StatGroup>
           <Stat>
             <StatLabel>Total Score</StatLabel>
             <StatNumber>{Math.round(totalScore)}</StatNumber>
           </Stat>
         </StatGroup>
-      </div>
+      </Box>
       <Grid templateColumns='repeat(3, 1fr)' gap={6}>
         <GridItem w='100%'>
           <ChainDataDisplay
@@ -139,7 +140,7 @@ const ChainData = () => {
             chainTiker='C2FLR'
             wrappedAmount={convertWeiToEther(flareWrapped)}
             totalTransactions={flareTransactions}
-            NFTCount={0}
+            NFTCount={flareNFTs.length}
             loading={flareLoading}
             error={flareError}
             score={scorePerChain.flare}
@@ -152,7 +153,7 @@ const ChainData = () => {
             chainTiker='ETH'
             wrappedAmount={convertWeiToEther(morphWrapped)}
             totalTransactions={morphTransactions}
-            NFTCount={morphNFTs}
+            NFTCount={morphNFTCount}
             loading={morphLoading}
             error={morphError}
             score={scorePerChain.morph}
@@ -165,7 +166,7 @@ const ChainData = () => {
             chainTiker='SCRL'
             wrappedAmount={convertWeiToEther(scrollWrapped)}
             totalTransactions={scrollTransactions}
-            NFTCount={scrollNFTs}
+            NFTCount={scrollNFTs.length}
             loading={scrollLoading}
             error={scrollError}
             score={scorePerChain.scroll}
@@ -176,13 +177,25 @@ const ChainData = () => {
       <Box mt='8'>
         <Heading size='md' my='4'>Your Trust Score NFTs</Heading>
         {
-          nfts.length === 0 ?
+          [...scrollNFTs, ...morphNFTs, ...flareNFTs].length === 0 ?
             <Box>Perform transactions to get trusted NFTs</Box> :
             <Grid templateColumns='repeat(6, 1fr)' gap={6}>
               {
-                nfts.map((nft, idx) => (
+                scrollNFTs.map((nft, idx) => (
                   <GridItem w='100%' key={idx} >
-                    <NFTCard tokenId={nft.tokenId} contractAddress={nft.contractAddress} />
+                    <NFTCard tokenId={nft.tokenId} contractAddress={nft.contractAddress} chainName='scroll' chainId={CHAIN_TO_ID.scroll} />
+                  </GridItem>
+                ))
+              }{
+                morphNFTs.map((nft, idx) => (
+                  <GridItem w='100%' key={idx} >
+                    <NFTCard tokenId={nft.tokenId} contractAddress={nft.contractAddress} chainName='morph' chainId={CHAIN_TO_ID.morph} />
+                  </GridItem>
+                ))
+              }{
+                flareNFTs.map((nft, idx) => (
+                  <GridItem w='100%' key={idx} >
+                    <NFTCard tokenId={nft.tokenId} contractAddress={nft.contractAddress} chainName='flare' chainId={CHAIN_TO_ID.flare} />
                   </GridItem>
                 ))
               }

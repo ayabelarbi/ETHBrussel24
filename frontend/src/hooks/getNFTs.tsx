@@ -1,20 +1,44 @@
 import { useEffect, useState } from 'react';
+import { getAddress } from 'viem';
 
-import { getAddressNFTs } from '../lib/scrollConnector';
+import { useReadContract } from 'wagmi';
+import NFTAbi from '../utils/NFTabi.json';
 
-export const useGetNFTs = ({ address }: { address: `0x${string}` | undefined }) => {
+interface NFTHookParams {
+  address: `0x${string}` | undefined;
+  contractAddress: string
+  chainId: number
+}
+
+export const useGetNFTs = ({ address, contractAddress, chainId }: NFTHookParams) => {
   const [nfts, setNFTs] = useState<any[]>([]);
-  useEffect(() => {
-    const fetchNFTs = async () => {
-      const nfts = await getAddressNFTs(address);
-      console.log('NFTs:', nfts);
-      if (typeof nfts !== 'undefined') {
-        setNFTs(nfts);
-      }
-    };
+  const { data } = useReadContract({
+    abi: NFTAbi,
+    address: getAddress(contractAddress),
+    functionName: 'getNftsPerAddress',
+    args: [address],
+    chainId: chainId
+  });
 
-    fetchNFTs();
-  }, [address]);
+  useEffect(() => {
+    if (data) {
+      let items: any = data;
+      // cast the data to an array
+      if (!Array.isArray(items)) {
+        items = [items];
+      }
+      // convert each nft to a readable format
+      const nfts = items.map((bigId: any) => {
+        return {
+          tokenId: parseFloat(bigId.toString()),
+          contractAddress: contractAddress
+        }
+      });
+      console.log('NFTs:', nfts);
+      setNFTs(nfts);
+    }
+  }, [data]);
+
 
   return { nfts };
 }

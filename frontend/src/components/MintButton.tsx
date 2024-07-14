@@ -19,10 +19,10 @@ interface MintButtonParams {
   address: `0x${string}` | undefined
   totalScore: number
   chainId: number
-  scAddress: string
+  contractAddress: string
 }
 
-const MintButton = ({ address, totalScore, chainId, scAddress }: MintButtonParams) => {
+const MintButton = ({ address, totalScore, chainId, contractAddress }: MintButtonParams) => {
   const [loading, setLoading] = useState(false);
   const [nftName, setNftName] = useState('');
   const { data: hash, writeContract, isSuccess, isError, error } = useWriteContract();
@@ -40,7 +40,7 @@ const MintButton = ({ address, totalScore, chainId, scAddress }: MintButtonParam
 
     setLoading(true);
     writeContract({
-      address: getAddress(scAddress),  // make sure to use 0x{string} format
+      address: getAddress(contractAddress),  // make sure to use 0x{string} format
       abi,
       functionName: 'mint',
       args: [address, messageHash, signature, level - 1], // /!\ the levels are 0-indexed (0, 1, 2) on the smart contract

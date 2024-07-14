@@ -325,6 +325,25 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "getNftsPerAddress",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "nfts",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "owner",
         "type": "address"
       },
