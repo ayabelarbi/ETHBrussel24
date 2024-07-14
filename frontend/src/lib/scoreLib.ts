@@ -1,14 +1,15 @@
 const WEIGHTS = {
   amountWrapped: 0.5,
   numberTransactions: 0.3,
-  tokensCount: 0.4
+  tokensCount: 2
 }
 
 // Adjust the number of points given for each chain, according to the token's value
 const CHAIN_COEFFICIENTS: { [key: string]: number } = {
   flare: 0.5,
   morph: 1000,
-  scroll: 1000
+  scroll: 1000,
+  sepolia: 1000
 }
 
 export const MIN_SCORE_FOR_LEVEL: { [key: number]: number } = {

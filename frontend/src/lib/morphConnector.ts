@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 
 import ContractAbi from '../utils/MorphContractAbi.json';
 const contractAddress = '0x5300000000000000000000000000000000000006';
-const provider = new ethers.providers.JsonRpcProvider('https://rpc-quicknode-holesky.morphl2.io');
+const provider = new ethers.JsonRpcProvider('https://rpc-quicknode-holesky.morphl2.io');
 const chunkSize = 7000;
 
 export async function getTotalAmountBridged(address: string | `0x${string}` | undefined) {
@@ -25,12 +25,12 @@ export async function getTotalAmountBridged(address: string | `0x${string}` | un
     };
 
     const logs = await provider.getLogs(eventFilter);
-    const iface = new ethers.utils.Interface(ContractAbi);
-    logs.map(log => {
+    const iface = new ethers.Interface(ContractAbi);
+    logs.map((log: any) => {
       try {
         const event = iface.parseLog(log);
-        const args = event.args;
-        if (args[1] == address) {
+        const args = event?.args;
+        if (args && args[1] == address) {
           amount = amount + parseInt(args[2]);
         }
       } catch (error) {
