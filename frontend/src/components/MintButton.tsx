@@ -8,6 +8,10 @@ import abi from '../utils/NFTabi.json';
 import { useMintParams } from "../hooks/mintParams";
 import { LEVEL_TO_NAME, MIN_SCORE_FOR_LEVEL } from '../lib/scoreLib';
 
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 import {
   Button,
   Box,
@@ -28,6 +32,20 @@ const MintButton = ({ address, totalScore, chainId, contractAddress }: MintButto
   const [nftName, setNftName] = useState('');
   const { data: hash, writeContract, isSuccess, isError, error } = useWriteContract();
   const { canMint, messageHash, signature, level } = useMintParams({ address, totalScore })
+
+  useEffect(() => {
+    if (hash) {
+      toast(<div>View your transaction hash on Blocscout: <a href={`https://eth-sepolia.blockscout.com/api?module=transaction&action=gettxinfo&txhash=${hash}`} target="_blank" rel="noopener noreferrer">{hash}</a></div>, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }, [hash]);
 
   useEffect(() => {
     if (level <= 0) {
@@ -61,28 +79,31 @@ const MintButton = ({ address, totalScore, chainId, contractAddress }: MintButto
     )
   }
 
-  return (
-    <Box display='flex-col'>
-      <Button onClick={mint} disabled={!canMint || isSuccess}>
-        Mint {nftName} NFT
-      </Button>
-      {loading && !isSuccess && <p>Minting...</p>}
-      {
-        hash &&
-        <p>Transaction hash: {hash}</p>
-      }
-      {
-        isError &&
-        <>
-          <p>Failed to mint NFT</p>
-          <p>{error.message} {error.name}</p>
-        </>
-      }
-      {
-        isSuccess &&
-        <p>NFT minted successfully</p>
-      }
-    </Box>
+   return (
+    <>
+      <ToastContainer />
+      <Box display='flex-col'>
+        <Button onClick={mint} disabled={!canMint || isSuccess}>
+          Mint {nftName} NFT
+        </Button>
+        {loading && !isSuccess && <p>Minting...</p>}
+        {
+          hash &&
+          <p>Transaction hash: {hash}</p>
+        }
+        {
+          isError &&
+          <>
+            <p>Failed to mint NFT</p>
+            <p>{error.message} {error.name}</p>
+          </>
+        }
+        {
+          isSuccess &&
+          <p>NFT minted successfully</p>
+        }
+      </Box>
+    </>
   );
 };
 
