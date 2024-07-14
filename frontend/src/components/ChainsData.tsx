@@ -20,6 +20,10 @@ import {
   fetchTokenCounts as getScrollTokensCount
 } from '../lib/scrollConnector';
 
+import {
+  fetchTransactionCount as getSepoliaTx,
+} from '../lib/sepoliaConnector';
+
 import { useBlockchainData } from '../hooks/fetchBlockchainData';
 import { useGetNFTs } from '../hooks/getNFTs';
 import NFTCard from './NFTCard';
@@ -46,12 +50,14 @@ const ChainData = () => {
   const [scorePerChain, setScorePerChain] = useState({
     'flare': 0,
     'morph': 0,
-    'scroll': 0
+    'scroll': 0,
+    'sepolia': 0
   })
 
   const { nfts: scrollNFTs } = useGetNFTs({ address, contractAddress: CHAIN_TO_SC_ADDRESS.scroll, chainId: CHAIN_TO_ID.scroll });
   const { nfts: morphNFTs } = useGetNFTs({ address, contractAddress: CHAIN_TO_SC_ADDRESS.morph, chainId: CHAIN_TO_ID.morph });
   const { nfts: flareNFTs } = useGetNFTs({ address, contractAddress: CHAIN_TO_SC_ADDRESS.flare, chainId: CHAIN_TO_ID.flare });
+  const { nfts: sepoliaNFTs } = useGetNFTs({ address, contractAddress: CHAIN_TO_SC_ADDRESS.sepolia, chainId: CHAIN_TO_ID.sepolia });
 
   // FLARE data
   const {
@@ -95,6 +101,16 @@ const ChainData = () => {
     getTokensCount: getScrollTokensCount
   });
 
+  // SEPOLIA DATA
+  const {
+    totalTransactions: sepoliaTransactions,
+    loading: sepoliaLoading,
+    error: sepoliaError
+  } = useBlockchainData({
+    address,
+    getTotalTransactionsCount: getSepoliaTx
+  });
+
   // compute flare score
   useEffect(() => {
     scorePerChain.flare = computeDefaultScoreChain('flare', flareWrapped, flareTransactions, flareTokensCount);
@@ -115,6 +131,13 @@ const ChainData = () => {
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [scrollWrapped, scrollTransactions]);
+
+  // compute sepolia score
+  useEffect(() => {
+    scorePerChain.sepolia = computeDefaultScoreChain('sepolia', 0, sepoliaTransactions, 1);
+    setScorePerChain(scorePerChain);
+    computeTotalScore();
+  }, [sepoliaTransactions]);
 
   const computeTotalScore = () => {
     const total = Object.values(scorePerChain).reduce((acc, score) => acc + score, 0);
@@ -145,6 +168,32 @@ const ChainData = () => {
         <GridItem w='100%'>
           <ChainDataDisplay
             address={address}
+            chainName='Sepolia'
+            chainTiker='ETH'
+            totalTransactions={sepoliaTransactions}
+            wrappedAmount={0}
+            tokensCount={1}
+            loading={sepoliaLoading}
+            error={sepoliaError}
+            score={scorePerChain.sepolia}
+          />
+        </GridItem>
+        <GridItem w='100%'>
+          <ChainDataDisplay
+            address={address}
+            chainName='Scroll'
+            chainTiker='ETH'
+            wrappedAmount={convertWeiToEther(scrollWrapped)}
+            totalTransactions={scrollTransactions}
+            tokensCount={scrollTokensCount}
+            loading={scrollLoading}
+            error={scrollError}
+            score={scorePerChain.scroll}
+          />
+        </GridItem>
+        <GridItem w='100%'>
+          <ChainDataDisplay
+            address={address}
             chainName='Flare'
             chainTiker='C2FLR'
             wrappedAmount={convertWeiToEther(flareWrapped)}
@@ -168,25 +217,12 @@ const ChainData = () => {
             score={scorePerChain.morph}
           />
         </GridItem>
-        <GridItem w='100%'>
-          <ChainDataDisplay
-            address={address}
-            chainName='Scroll'
-            chainTiker='ETH'
-            wrappedAmount={convertWeiToEther(scrollWrapped)}
-            totalTransactions={scrollTransactions}
-            tokensCount={scrollTokensCount}
-            loading={scrollLoading}
-            error={scrollError}
-            score={scorePerChain.scroll}
-          />
-        </GridItem>
       </Grid>
 
       <Box mt='8'>
         <Heading size='md' my='4'>Your Trust Score NFTs</Heading>
         {
-          [...scrollNFTs, ...morphNFTs, ...flareNFTs].length === 0 ?
+          [...scrollNFTs, ...morphNFTs, ...flareNFTs, ...sepoliaNFTs].length === 0 ?
             <Box>Perform transactions to get trusted NFTs</Box> :
             <Grid templateColumns='repeat(6, 1fr)' gap={6}>
               {
@@ -205,6 +241,12 @@ const ChainData = () => {
                 flareNFTs.map((nft, idx) => (
                   <GridItem w='100%' key={idx} >
                     <NFTCard tokenId={nft.tokenId} contractAddress={nft.contractAddress} chainName='flare' chainId={CHAIN_TO_ID.flare} />
+                  </GridItem>
+                ))
+              }{
+                sepoliaNFTs.map((nft, idx) => (
+                  <GridItem w='100%' key={idx} >
+                    <NFTCard tokenId={nft.tokenId} contractAddress={nft.contractAddress} chainName='sepolia' chainId={CHAIN_TO_ID.sepolia} />
                   </GridItem>
                 ))
               }

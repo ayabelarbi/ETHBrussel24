@@ -8,7 +8,8 @@ const WEIGHTS = {
 const CHAIN_COEFFICIENTS: { [key: string]: number } = {
   flare: 0.5,
   morph: 1000,
-  scroll: 1000
+  scroll: 1000,
+  sepolia: 1000
 }
 
 export const MIN_SCORE_FOR_LEVEL: { [key: number]: number } = {
