@@ -1,6 +1,6 @@
 #ETHGlobal Brussels 2024 Hackathon 
 
-## How it works ?
+## How does it work ?
 
 ## How to run it ? 
 
