@@ -14,19 +14,20 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 
-
-
+import { useAccount } from "wagmi";
 import ConnectionCard from "./ConnectionCard";
 import videoBg from "../assets/bg.mp4";
 import buzzHome from "../assets/BUZZ.gif";
 
 const Home = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isConnected } = useAccount();
+
   const [isSuccess, setIsSuccess] = useState(false); 
   const navigate = useNavigate(); 
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess || isConnected) {
         console.log('isSuccess', isSuccess);
       navigate('/dashboard'); 
     }

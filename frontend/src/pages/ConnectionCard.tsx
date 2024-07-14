@@ -11,7 +11,7 @@ import {
 
 import { useConnect, useAccount} from 'wagmi';
 
-import {useState, useEffect} from "react"; 
+import {useState} from "react"; 
 
 import { usePrivy, User } from "@privy-io/react-auth";
 import { IProvider } from "@web3auth/base";
@@ -58,13 +58,11 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({ setIsSuccess }) => {
 
   const connectDynamic = () => {
     console.log("Connecting to Dynamic");
-    //  TODO
     setIsSuccess(false);
   };
 
   const connectWorldcoin = () => {
     console.log("Connecting to Worldcoin");
-    // TODO
     setIsSuccess(false);
   };
   return (
