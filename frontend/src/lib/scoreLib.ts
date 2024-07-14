@@ -1,7 +1,7 @@
 const WEIGHTS = {
-  amountWrapped: 0.7,
-  numberTransactions: 0.3,
-  nftCount: 0.5
+  amountWrapped: 0.6,
+  numberTransactions: 0.2,
+  nftCount: 0.2
 }
 
 // Adjust the number of points given for each chain, according to the token's value
@@ -12,9 +12,9 @@ const CHAIN_COEFFICIENTS: { [key: string]: number } = {
 }
 
 export const MIN_SCORE_FOR_LEVEL: { [key: number]: number } = {
-  1: 45,
-  2: 80,
-  3: 120,
+  1: 38,
+  2: 60,
+  3: 100,
 };
 
 export const LEVEL_TO_NAME: { [key: number]: string } = {
