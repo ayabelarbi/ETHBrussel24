@@ -5,17 +5,19 @@ import { computeDefaultScoreChain, convertWeiToEther } from '../lib/scoreLib';
 import {
   getTotalAmountBridged as getMorphBridged,
   getTotalTransactionsCount as getMorphTx,
-  getNFTCounts as getMorphNFTs
+  getTokenCount as getMorphTokensCount
 } from '../lib/morphConnector';
 
 import {
   getTotalAmountBridged as getFlareBridged,
-  getTotalTransactionsCount as getFlareTx
+  getTotalTransactionsCount as getFlareTx,
+  getTotalTokenCount as getFlareTokensCount
 } from '../lib/flareConnector';
 
 import {
   fetchBridgeTransactions as getScrollBridged,
   fetchTransactions as getScrollTx,
+  fetchTokenCounts as getScrollTokensCount
 } from '../lib/scrollConnector';
 
 import { useBlockchainData } from '../hooks/fetchBlockchainData';
@@ -53,58 +55,61 @@ const ChainData = () => {
   const {
     wrappedAmount: flareWrapped,
     totalTransactions: flareTransactions,
+    totalTokens: flareTokensCount,
     loading: flareLoading,
     error: flareError
   } = useBlockchainData({
     address,
     getTotalAmountBridged: getFlareBridged,
-    getTotalTransactionsCount: getFlareTx
+    getTotalTransactionsCount: getFlareTx,
+    getTokensCount: getFlareTokensCount
   });
 
   // MORPH data
   const {
     wrappedAmount: morphWrapped,
     totalTransactions: morphTransactions,
-    totalNFTs: morphNFTCount,
+    totalTokens: morphTokensCount,
     loading: morphLoading,
     error: morphError
   } = useBlockchainData({
     address,
     getTotalAmountBridged: getMorphBridged,
     getTotalTransactionsCount: getMorphTx,
-    getNFTCounts: getMorphNFTs
+    getTokensCount: getMorphTokensCount
   });
 
   // SCROLL DATA
   const {
     wrappedAmount: scrollWrapped,
     totalTransactions: scrollTransactions,
-    totalNFTs: scrollNFTCount,
+    totalTokens: scrollTokensCount,
     loading: scrollLoading,
     error: scrollError
   } = useBlockchainData({
     address,
     getTotalAmountBridged: getScrollBridged,
     getTotalTransactionsCount: getScrollTx,
+    getTokensCount: getScrollTokensCount
   });
 
   // compute flare score
   useEffect(() => {
-    scorePerChain.flare = computeDefaultScoreChain('flare', flareWrapped, flareTransactions, 0);
+    scorePerChain.flare = computeDefaultScoreChain('flare', flareWrapped, flareTransactions, flareTokensCount);
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [flareWrapped, flareTransactions]);
 
   // compute morph score
   useEffect(() => {
-    scorePerChain.morph = computeDefaultScoreChain('morph', morphWrapped, morphTransactions, morphNFTCount);
+    scorePerChain.morph = computeDefaultScoreChain('morph', morphWrapped, morphTransactions, morphTokensCount);
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [morphWrapped, morphTransactions]);
 
   // compute scroll score
   useEffect(() => {
-    scorePerChain.scroll = computeDefaultScoreChain('scroll', scrollWrapped, scrollTransactions, scrollNFTCount);
+    scorePerChain.scroll = computeDefaultScoreChain('scroll', scrollWrapped, scrollTransactions, scrollTokensCount);
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [scrollWrapped, scrollTransactions]);
@@ -128,7 +133,7 @@ const ChainData = () => {
         <StatGroup>
           <Stat>
             <StatLabel>Total Score</StatLabel>
-            <StatNumber>{Math.round(totalScore)}</StatNumber>
+            <StatNumber>{totalScore.toFixed(2)}</StatNumber>
           </Stat>
         </StatGroup>
       </Box>
@@ -140,7 +145,7 @@ const ChainData = () => {
             chainTiker='C2FLR'
             wrappedAmount={convertWeiToEther(flareWrapped)}
             totalTransactions={flareTransactions}
-            NFTCount={flareNFTs.length}
+            tokensCount={flareTokensCount}
             loading={flareLoading}
             error={flareError}
             score={scorePerChain.flare}
@@ -153,7 +158,7 @@ const ChainData = () => {
             chainTiker='ETH'
             wrappedAmount={convertWeiToEther(morphWrapped)}
             totalTransactions={morphTransactions}
-            NFTCount={morphNFTCount}
+            tokensCount={morphTokensCount}
             loading={morphLoading}
             error={morphError}
             score={scorePerChain.morph}
@@ -163,10 +168,10 @@ const ChainData = () => {
           <ChainDataDisplay
             address={address}
             chainName='Scroll'
-            chainTiker='SCRL'
+            chainTiker='ETH'
             wrappedAmount={convertWeiToEther(scrollWrapped)}
             totalTransactions={scrollTransactions}
-            NFTCount={scrollNFTs.length}
+            tokensCount={scrollTokensCount}
             loading={scrollLoading}
             error={scrollError}
             score={scorePerChain.scroll}

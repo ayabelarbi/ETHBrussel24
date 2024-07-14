@@ -18,7 +18,7 @@ interface ChainDataParams {
   chainTiker: string,
   wrappedAmount: number,
   totalTransactions: number,
-  NFTCount: number,
+  tokensCount: number,
   score: number
   loading: boolean
   error: any
@@ -30,7 +30,7 @@ export default function ChainDataDisplay({
   chainTiker,
   wrappedAmount,
   totalTransactions,
-  NFTCount,
+  tokensCount,
   loading,
   error,
   score
@@ -57,7 +57,7 @@ export default function ChainDataDisplay({
               <Stack divider={<StackDivider />} spacing='4'>
                 <Box>
                   <Heading size='xs' textTransform='uppercase'>
-                    Wrapped Amount
+                    {chainName.toLocaleLowerCase() === 'flare' ? 'Wrapped Amount' : 'Bridge Amount'}
                   </Heading>
                   <Text pt='2' fontSize='sm'>
                     {wrappedAmount} {chainTiker}
@@ -73,10 +73,10 @@ export default function ChainDataDisplay({
                 </Box>
                 <Box>
                   <Heading size='xs' textTransform='uppercase'>
-                    Number NFTs
+                    Number of tokens
                   </Heading>
                   <Text pt='2' fontSize='sm'>
-                    {NFTCount} NFTs
+                    {tokensCount} tokens
                   </Text>
                 </Box>
                 <Box>
@@ -84,7 +84,7 @@ export default function ChainDataDisplay({
                     Chain Score
                   </Heading>
                   <Text pt='2' fontSize='sm'>
-                    {Math.round(score)}
+                    {score.toFixed(2)}
                   </Text>
                 </Box>
               </Stack>

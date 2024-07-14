@@ -41,3 +41,23 @@ export async function fetchTransactions(address: string | `0x${string}` | undefi
     return 0;
   }
 }
+
+export async function fetchTokenCounts(address: string | `0x${string}` | undefined) {
+  let tokenCount = 0;
+  try {
+    const response = await fetch(`${API_URL}?module=account&action=balance&address=${address}&apikey=${API_KEY}`);
+    const data = await response.json();
+    const transactions = data.result;
+
+    // Count the total number of transactions
+    if (Number(transactions) != 0) {
+      tokenCount = 1;
+    }
+    console.log(`Total number of tokens: ${tokenCount}`);
+  } catch (error) {
+    console.error('Error fetching tokens:', error);
+    return 0;
+  }
+
+  return tokenCount;
+}

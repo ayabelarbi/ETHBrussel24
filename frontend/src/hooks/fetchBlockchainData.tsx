@@ -6,18 +6,18 @@ interface useDataParams {
   address: `0x${string}` | undefined,
   getTotalAmountBridged?: (address: string | `0x${string}` | undefined) => Promise<number>,
   getTotalTransactionsCount?: (address: string | `0x${string}` | undefined) => Promise<number>
-  getNFTCounts?: (address: string | `0x${string}` | undefined) => Promise<number>
+  getTokensCount?: (address: string | `0x${string}` | undefined) => Promise<number>
 }
 
 export const useBlockchainData = ({
   address,
   getTotalAmountBridged,
   getTotalTransactionsCount,
-  getNFTCounts
+  getTokensCount
 }: useDataParams) => {
   const [wrappedAmount, setWrappedAmount] = useState(0);
   const [totalTransactions, setTotalTransactions] = useState(0);
-  const [totalNFTs, setTotalNFTs] = useState(0);
+  const [totalTokens, setTotalTokens] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -29,10 +29,9 @@ export const useBlockchainData = ({
       }
       setLoading(true);
       try {
-        if (getNFTCounts) {
-          const totalNFTs = await getNFTCounts(address);
-          console.log('Total NFTs:', totalNFTs);
-          setTotalNFTs(totalNFTs);
+        if (getTokensCount) {
+          const totalTokens = await getTokensCount(address);
+          setTotalTokens(totalTokens);
         }
         if (getTotalAmountBridged) {
           const wrappedAmount = await getTotalAmountBridged(address);
@@ -40,7 +39,6 @@ export const useBlockchainData = ({
         }
         if (getTotalTransactionsCount) {
           const totalTransactions = await getTotalTransactionsCount(address);
-          console.log('Total transactions:', totalTransactions);
           setTotalTransactions(totalTransactions);
         }
       } catch (error: any) {
@@ -51,5 +49,5 @@ export const useBlockchainData = ({
     fetchData();
   }, [address]);
 
-  return { wrappedAmount, totalTransactions, totalNFTs, loading, error };
+  return { wrappedAmount, totalTransactions, totalTokens, loading, error };
 }

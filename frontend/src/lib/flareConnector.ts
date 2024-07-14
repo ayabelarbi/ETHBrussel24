@@ -61,3 +61,29 @@ export async function getTotalTransactionsCount(address: string | `0x${string}` 
     return 0;
   }
 }
+
+export async function getTotalTokenCount(address: string | `0x${string}` | undefined) {
+  const apiUrl = `https://coston2-explorer.flare.network/api?module=account&action=tokenlist&address=${address}`;
+  let nonZeroBalanceTokensCount = 0
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    const items = data.result;
+
+    if (items) {
+      nonZeroBalanceTokensCount = items.filter((item: any) => {
+        return item.balance && item.balance !== '0';
+      }).length;
+
+      console.log(`Total tokens with non-zero balance for address ${address}: ${nonZeroBalanceTokensCount}`);
+    } else {
+      console.log('No transactions found or unexpected response format.');
+      return 0;
+    }
+  } catch (error) {
+    console.error('Error fetching transactions:', error);
+    return 0;
+  }
+
+  return nonZeroBalanceTokensCount;
+}

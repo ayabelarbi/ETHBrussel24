@@ -60,7 +60,6 @@ export async function getTotalTransactionsCount(address: string | `0x${string}` 
     return txn_count;
   } catch (error: any) {
     console.error('Error fetching transactions:', error);
-    //throw new Error(`Failed to fetch transactions for address ${address}: ${error.message}`);
     return 0;
   }
 }
@@ -82,7 +81,38 @@ export async function getNFTCounts(address: string | `0x${string}` | undefined) 
     }
   } catch (error: any) {
     console.error('Error fetching transactions:', error);
-    //throw new Error(`Failed to fetch NFTs for address ${address}: ${error.message}`);
     return 0;
   }
+}
+
+export async function getTokenCount(address: string | `0x${string}` | undefined) {
+  if (!address) {
+    return 0;
+  }
+
+  const apiURL = `https://explorer-api-holesky.morphl2.io/api/v2/addresses/${address}/tokens?type=ERC-20%2CERC-1155`;
+
+  const uniqueTokens = new Set();
+  try {
+    const response = await fetch(apiURL);
+    const data = await response.json();
+    let tokens_list = data.items;
+    if (tokens_list) {
+      // Create a Set to store unique token addresses
+      tokens_list.forEach((item: any) => {
+        // Only add the token address to the Set if the value is non-zero
+        if (item.value !== "0") {
+          uniqueTokens.add(item.token.address);
+        }
+      });
+    } else {
+      console.log('No tokens found or unexpected response format.');
+      return 0;
+    }
+  } catch (error) {
+    console.error('Error fetching transactions:', error);
+    return 0;
+  }
+
+  return uniqueTokens.size;
 }

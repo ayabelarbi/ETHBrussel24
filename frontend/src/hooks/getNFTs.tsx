@@ -34,7 +34,6 @@ export const useGetNFTs = ({ address, contractAddress, chainId }: NFTHookParams)
           contractAddress: contractAddress
         }
       });
-      console.log('NFTs:', nfts);
       setNFTs(nfts);
     }
   }, [data]);
