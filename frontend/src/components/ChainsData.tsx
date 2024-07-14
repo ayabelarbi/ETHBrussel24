@@ -35,9 +35,11 @@ import {
 import ChainDataDisplay from './ChainDataDisplay';
 import { CHAIN_TO_SC_ADDRESS, CHAIN_TO_ID } from '../globals';
 
+import { usePrivy } from '@privy-io/react-auth';
 
 const ChainData = () => {
   const { address } = useAccount();
+  const { user } = usePrivy();
   const [totalScore, setTotalScore] = useState(0);
   const [scorePerChain, setScorePerChain] = useState({
     'flare': 0,
@@ -117,11 +119,13 @@ const ChainData = () => {
   return (
     <Box>
       <div>
-        {
-          address
-            ? <p>Connected account: {address}</p>
-            : <p>GO to the Login page!</p>
-        }
+      {
+  address
+    ? <p>Connected account: {address}</p>
+    : user
+      ? <p>Connected account: {user.wallet?.address}</p>
+      : <p>Go to the Login page!</p>
+}
       </div>
       <Heading py='8'>Chain data</Heading>
       <Box py='4'>
