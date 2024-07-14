@@ -36,19 +36,11 @@ const MintButton = ({ address, totalScore, chainId, scAddress }: MintButtonParam
   }, [level]);
 
   const mint = async () => {
-    console.log('minting');
-    console.log('chainId', chainId);
-    console.log('scAddress', scAddress);
-    console.log('config', config);
     await switchChain(config, { chainId })
 
     setLoading(true);
     writeContract({
-<<<<<<< HEAD
-      address: getAddress(VITE_SC_ADDRESS),  // make sure to use 0x{string} format
-=======
       address: getAddress(scAddress),  // make sure to use 0x{string} format
->>>>>>> ef7d909 (feat: allow to mint an NFT on each chain)
       abi,
       functionName: 'mint',
       args: [address, messageHash, signature, level - 1], // /!\ the levels are 0-indexed (0, 1, 2) on the smart contract
