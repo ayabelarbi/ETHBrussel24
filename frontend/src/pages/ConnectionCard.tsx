@@ -23,7 +23,7 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({ setIsSuccess }) => {
   const { login, authenticated, user, logout } = usePrivy();
   
   const { isConnected } = useAccount();
-  const { connect} = useConnect();
+  const { connect } = useConnect();
 
   const connectPrivy = () => {
     login();
@@ -64,7 +64,6 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({ setIsSuccess }) => {
         <Button onClick={connectWeb3Auth}>Web3Auth</Button>
         <Button onClick={connectDynamic}>Dynamic</Button>
         <Button onClick={connectWorldcoin}>Worldcoin</Button>
-        <Button onClick={logout}>Logout</Button>
       </VStack>
 
       <Center>
