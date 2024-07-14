@@ -20,7 +20,7 @@ interface ConnectionCardProps {
 }
 
 const ConnectionCard: React.FC<ConnectionCardProps> = ({ setIsSuccess }) => {
-  const { login, authenticated, user, logout } = usePrivy();
+  const { login, authenticated, user } = usePrivy();
   
   const { isConnected } = useAccount();
   const { connect } = useConnect();

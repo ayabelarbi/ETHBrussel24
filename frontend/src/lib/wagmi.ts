@@ -20,7 +20,6 @@ export const zeroNetworktestnet = {
   },
 }
 
-
 export const config = createConfig({
   chains: [zeroNetworktestnet],
   transports: {

@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, Box, Text, Stack, Heading, StackDivider, Center } from '@chakra-ui/react';
+import { Card, CardHeader, CardBody, Box, Text, Stack, Heading, StackDivider } from '@chakra-ui/react';
 
 interface ChainDataParams {
   chainName: string,
