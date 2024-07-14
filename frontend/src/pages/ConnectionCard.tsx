@@ -14,7 +14,7 @@ import { useConnect, useAccount } from 'wagmi';
 import { usePrivy } from "@privy-io/react-auth";
 
 import { zeroNetworktestnet } from "../lib/wagmi";
-import { scrollSepolia, flareTestnet, morphHolesky, sepolia } from 'viem/chains';
+import { scrollSepolia, flareTestnet, morphHolesky, sepolia, gnosisChiado } from 'viem/chains';
 
 import web3AuthInstance from "../hooks/connectWithWeb3Auth";
 interface ConnectionCardProps {
@@ -39,7 +39,9 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({ setIsSuccess }) => {
     console.log("Connecting to Web3Auth");
     setIsSuccess(false);
 
-    const connectorInstance = web3AuthInstance([zeroNetworktestnet, scrollSepolia, flareTestnet, morphHolesky, sepolia]);
+    const connectorInstance = web3AuthInstance([
+      zeroNetworktestnet, scrollSepolia, flareTestnet, morphHolesky, sepolia, gnosisChiado
+    ]);
 
     connect({
       connector: connectorInstance

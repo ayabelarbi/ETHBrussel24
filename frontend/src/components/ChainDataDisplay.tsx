@@ -1,4 +1,4 @@
-import { CHAIN_TO_ID, CHAIN_TO_SC_ADDRESS } from '../globals';
+import { CHAIN_TO_ID, CHAIN_TO_NFT_ADDRESS, CHAIN_TO_STORE_ADDRESS } from '../globals';
 import {
   Card,
   CardHeader,
@@ -11,6 +11,7 @@ import {
   CardFooter
 } from '@chakra-ui/react';
 import MintButton from './MintButton';
+import StoreButton from './StoreButton';
 
 interface ChainDataParams {
   address: `0x${string}` | undefined,
@@ -19,9 +20,10 @@ interface ChainDataParams {
   wrappedAmount: number,
   totalTransactions: number,
   tokensCount: number,
-  score: number
-  loading: boolean
-  error: any
+  score: number,
+  totalScore: number,
+  loading: boolean,
+  error: any,
 }
 
 export default function ChainDataDisplay({
@@ -33,13 +35,14 @@ export default function ChainDataDisplay({
   tokensCount,
   loading,
   error,
-  score
+  score,
+  totalScore
 }: ChainDataParams) {
 
   return (
     <Card variant="filled">
       <CardHeader>
-        <Heading size='md'>{chainName} data</Heading>
+        <Heading size='md'>{chainName}</Heading>
       </CardHeader>
 
       {
@@ -89,12 +92,18 @@ export default function ChainDataDisplay({
                 </Box>
               </Stack>
             </CardBody>
-            <CardFooter>
+            <CardFooter display='flex'>
               <MintButton
                 address={address}
-                totalScore={score}
+                chainScore={score}
                 chainId={CHAIN_TO_ID[chainName.toLocaleLowerCase()]}
-                contractAddress={CHAIN_TO_SC_ADDRESS[chainName.toLocaleLowerCase()]}
+                contractAddress={CHAIN_TO_NFT_ADDRESS[chainName.toLocaleLowerCase()]}
+              />
+              <StoreButton
+                address={address}
+                totalScore={totalScore}
+                chainId={CHAIN_TO_ID[chainName.toLocaleLowerCase()]}
+                contractAddress={CHAIN_TO_STORE_ADDRESS[chainName.toLocaleLowerCase()]}
               />
             </CardFooter>
           </>

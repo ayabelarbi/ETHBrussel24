@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { useAccount } from "wagmi";
-
-import { Button, HStack, VStack, Text } from "@chakra-ui/react";
+import { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
+import { useAvatar } from '../hooks/useAvatar';
 
 import PieCards from "./PieCards";
 
@@ -32,6 +31,7 @@ import NFTCard from "./NFTCard";
 
 import {
   Box,
+  Button,
   Heading,
   Grid,
   GridItem,
@@ -39,9 +39,10 @@ import {
   StatLabel,
   StatNumber,
   StatGroup,
+  HStack, VStack, Text
 } from "@chakra-ui/react";
 import ChainDataDisplay from "./ChainDataDisplay";
-import { CHAIN_TO_SC_ADDRESS, CHAIN_TO_ID } from "../globals";
+import { CHAIN_TO_NFT_ADDRESS, CHAIN_TO_ID } from "../globals";
 
 import { usePrivy, useLinkAccount } from "@privy-io/react-auth";
 
@@ -65,6 +66,8 @@ const ChainData = () => {
     scroll: 0,
     sepolia: 0,
   });
+
+  const { avatar, registerAvatar } = useAvatar();
 
   const linkedAccountMethods = user?.linkedAccounts.map((account, index) => (
     <span
@@ -113,22 +116,22 @@ const ChainData = () => {
 
   const { nfts: scrollNFTs } = useGetNFTs({
     address,
-    contractAddress: CHAIN_TO_SC_ADDRESS.scroll,
+    contractAddress: CHAIN_TO_NFT_ADDRESS.scroll,
     chainId: CHAIN_TO_ID.scroll,
   });
   const { nfts: morphNFTs } = useGetNFTs({
     address,
-    contractAddress: CHAIN_TO_SC_ADDRESS.morph,
+    contractAddress: CHAIN_TO_NFT_ADDRESS.morph,
     chainId: CHAIN_TO_ID.morph,
   });
   const { nfts: flareNFTs } = useGetNFTs({
     address,
-    contractAddress: CHAIN_TO_SC_ADDRESS.flare,
+    contractAddress: CHAIN_TO_NFT_ADDRESS.flare,
     chainId: CHAIN_TO_ID.flare,
   });
   const { nfts: sepoliaNFTs } = useGetNFTs({
     address,
-    contractAddress: CHAIN_TO_SC_ADDRESS.sepolia,
+    contractAddress: CHAIN_TO_NFT_ADDRESS.sepolia,
     chainId: CHAIN_TO_ID.sepolia,
   });
 
@@ -186,48 +189,28 @@ const ChainData = () => {
 
   // compute flare score
   useEffect(() => {
-    scorePerChain.flare = computeDefaultScoreChain(
-      "flare",
-      flareWrapped,
-      flareTransactions,
-      flareTokensCount
-    );
+    scorePerChain.flare = computeDefaultScoreChain('flare', flareWrapped, flareTransactions, flareTokensCount, avatar !== undefined);
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [flareWrapped, flareTransactions]);
 
   // compute morph score
   useEffect(() => {
-    scorePerChain.morph = computeDefaultScoreChain(
-      "morph",
-      morphWrapped,
-      morphTransactions,
-      morphTokensCount
-    );
+    scorePerChain.morph = computeDefaultScoreChain('morph', morphWrapped, morphTransactions, morphTokensCount, avatar !== undefined);
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [morphWrapped, morphTransactions]);
 
   // compute scroll score
   useEffect(() => {
-    scorePerChain.scroll = computeDefaultScoreChain(
-      "scroll",
-      scrollWrapped,
-      scrollTransactions,
-      scrollTokensCount
-    );
+    scorePerChain.scroll = computeDefaultScoreChain('scroll', scrollWrapped, scrollTransactions, scrollTokensCount, avatar !== undefined);
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [scrollWrapped, scrollTransactions]);
 
   // compute sepolia score
   useEffect(() => {
-    scorePerChain.sepolia = computeDefaultScoreChain(
-      "sepolia",
-      0,
-      sepoliaTransactions,
-      1
-    );
+    scorePerChain.sepolia = computeDefaultScoreChain('sepolia', 0, sepoliaTransactions, 1, avatar !== undefined);
     setScorePerChain(scorePerChain);
     computeTotalScore();
   }, [sepoliaTransactions]);
@@ -284,11 +267,18 @@ const ChainData = () => {
           <Text>Connected account: {address}</Text>
         ) : (
           <Text>No account connected</Text>
-  
+
         )}
       </div>
-      <Heading py="8">Chain data</Heading>
-      <Box py="4">
+      <div>
+        {
+          avatar
+            ? <p>Avatar registered as a {avatar.avatarInfo?.type}</p>
+            : <Button onClick={registerAvatar}>Get Avatar</Button>
+        }
+      </div>
+      <Heading py='8'>Chain data</Heading>
+      <Box py='4'>
         <StatGroup>
           <Stat>
             <StatLabel>Total Score</StatLabel>
@@ -308,6 +298,7 @@ const ChainData = () => {
             loading={sepoliaLoading}
             error={sepoliaError}
             score={scorePerChain.sepolia}
+            totalScore={totalScore}
           />
         </GridItem>
         <GridItem w="100%">
@@ -321,6 +312,7 @@ const ChainData = () => {
             loading={scrollLoading}
             error={scrollError}
             score={scorePerChain.scroll}
+            totalScore={totalScore}
           />
         </GridItem>
         <GridItem w="100%">
@@ -334,6 +326,7 @@ const ChainData = () => {
             loading={flareLoading}
             error={flareError}
             score={scorePerChain.flare}
+            totalScore={totalScore}
           />
         </GridItem>
         <GridItem w="100%">
@@ -347,6 +340,7 @@ const ChainData = () => {
             loading={morphLoading}
             error={morphError}
             score={scorePerChain.morph}
+            totalScore={totalScore}
           />
         </GridItem>
 
@@ -358,7 +352,7 @@ const ChainData = () => {
           Your Trust Score NFTs
         </Heading>
         {[...scrollNFTs, ...morphNFTs, ...flareNFTs, ...sepoliaNFTs].length ===
-        0 ? (
+          0 ? (
           <Box>Perform transactions to get trusted NFTs</Box>
         ) : (
           <Grid templateColumns="repeat(6, 1fr)" gap={6}>
