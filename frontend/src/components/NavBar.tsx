@@ -30,7 +30,7 @@ const Navbar = () => {
         <Text fontSize="lg" fontWeight="bold">
           BUZZ
         </Text>
-        <img src="https://img.icons8.com/emoji/48/000000/honeybee.png" class="bee"/>
+        <img src="https://img.icons8.com/emoji/48/000000/honeybee.png"/>
       </Flex>
 
       <Button display="flex" alignItems="center" onClick={handleLogout}>
