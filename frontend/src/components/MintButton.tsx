@@ -22,16 +22,16 @@ import {
 
 interface MintButtonParams {
   address: `0x${string}` | undefined
-  totalScore: number
+  chainScore: number
   chainId: number
   contractAddress: string
 }
 
-const MintButton = ({ address, totalScore, chainId, contractAddress }: MintButtonParams) => {
+const MintButton = ({ address, chainScore, chainId, contractAddress }: MintButtonParams) => {
   const [loading, setLoading] = useState(false);
   const [nftName, setNftName] = useState('');
   const { data: hash, writeContract, isSuccess, isError, error } = useWriteContract();
-  const { canMint, messageHash, signature, level } = useMintParams({ address, totalScore })
+  const { canMint, messageHash, signature, level } = useMintParams({ address, totalScore: chainScore })
 
   useEffect(() => {
     if (hash) {
@@ -68,7 +68,7 @@ const MintButton = ({ address, totalScore, chainId, contractAddress }: MintButto
   };
 
   if (level <= 0) {
-    const perc = Math.floor((totalScore * 100) / MIN_SCORE_FOR_LEVEL[level + 1]);
+    const perc = Math.floor((chainScore * 100) / MIN_SCORE_FOR_LEVEL[level + 1]);
     return (
       <Flex align='center' gap='6'>
         <p> Perform more transactions to be trusted on the network</p>
@@ -79,31 +79,29 @@ const MintButton = ({ address, totalScore, chainId, contractAddress }: MintButto
     )
   }
 
-   return (
-    <>
+  return (
+    <Box display='flex-col'>
       <ToastContainer />
-      <Box display='flex-col'>
-        <Button onClick={mint} disabled={!canMint || isSuccess}>
-          Mint {nftName} NFT
-        </Button>
-        {loading && !isSuccess && <p>Minting...</p>}
-        {
-          hash &&
-          <p>Transaction hash: {hash}</p>
-        }
-        {
-          isError &&
-          <>
-            <p>Failed to mint NFT</p>
-            <p>{error.message} {error.name}</p>
-          </>
-        }
-        {
-          isSuccess &&
-          <p>NFT minted successfully</p>
-        }
-      </Box>
-    </>
+      <Button onClick={mint} disabled={!canMint || isSuccess}>
+        Mint {nftName} NFT
+      </Button>
+      {loading && !isSuccess && !isError && <p>Minting...</p>}
+      {
+        hash &&
+        <p>Transaction hash: {hash}</p>
+      }
+      {
+        isError &&
+        <>
+          <p>Failed to mint NFT</p>
+          <p>{error.message} {error.name}</p>
+        </>
+      }
+      {
+        isSuccess &&
+        <p>NFT minted successfully</p>
+      }
+    </Box>
   );
 };
 

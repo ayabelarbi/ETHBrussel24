@@ -39,7 +39,7 @@ import {
   StatGroup,
 } from "@chakra-ui/react";
 import ChainDataDisplay from "./ChainDataDisplay";
-import { CHAIN_TO_SC_ADDRESS, CHAIN_TO_ID } from "../globals";
+import { CHAIN_TO_NFT_ADDRESS, CHAIN_TO_ID } from "../globals";
 
 import { usePrivy, useLinkAccount } from "@privy-io/react-auth";
 
@@ -111,22 +111,22 @@ const ChainData = () => {
 
   const { nfts: scrollNFTs } = useGetNFTs({
     address,
-    contractAddress: CHAIN_TO_SC_ADDRESS.scroll,
+    contractAddress: CHAIN_TO_NFT_ADDRESS.scroll,
     chainId: CHAIN_TO_ID.scroll,
   });
   const { nfts: morphNFTs } = useGetNFTs({
     address,
-    contractAddress: CHAIN_TO_SC_ADDRESS.morph,
+    contractAddress: CHAIN_TO_NFT_ADDRESS.morph,
     chainId: CHAIN_TO_ID.morph,
   });
   const { nfts: flareNFTs } = useGetNFTs({
     address,
-    contractAddress: CHAIN_TO_SC_ADDRESS.flare,
+    contractAddress: CHAIN_TO_NFT_ADDRESS.flare,
     chainId: CHAIN_TO_ID.flare,
   });
   const { nfts: sepoliaNFTs } = useGetNFTs({
     address,
-    contractAddress: CHAIN_TO_SC_ADDRESS.sepolia,
+    contractAddress: CHAIN_TO_NFT_ADDRESS.sepolia,
     chainId: CHAIN_TO_ID.sepolia,
   });
 
@@ -282,7 +282,7 @@ const ChainData = () => {
           <Text>Connected account: {address}</Text>
         ) : (
           <Text>No account connected</Text>
-  
+
         )}
       </div>
       <Heading py="8">Chain data</Heading>
@@ -306,6 +306,7 @@ const ChainData = () => {
             loading={sepoliaLoading}
             error={sepoliaError}
             score={scorePerChain.sepolia}
+            totalScore={totalScore}
           />
         </GridItem>
         <GridItem w="100%">
@@ -319,6 +320,7 @@ const ChainData = () => {
             loading={scrollLoading}
             error={scrollError}
             score={scorePerChain.scroll}
+            totalScore={totalScore}
           />
         </GridItem>
         <GridItem w="100%">
@@ -332,6 +334,7 @@ const ChainData = () => {
             loading={flareLoading}
             error={flareError}
             score={scorePerChain.flare}
+            totalScore={totalScore}
           />
         </GridItem>
         <GridItem w="100%">
@@ -345,6 +348,7 @@ const ChainData = () => {
             loading={morphLoading}
             error={morphError}
             score={scorePerChain.morph}
+            totalScore={totalScore}
           />
         </GridItem>
       </Grid>
@@ -354,7 +358,7 @@ const ChainData = () => {
           Your Trust Score NFTs
         </Heading>
         {[...scrollNFTs, ...morphNFTs, ...flareNFTs, ...sepoliaNFTs].length ===
-        0 ? (
+          0 ? (
           <Box>Perform transactions to get trusted NFTs</Box>
         ) : (
           <Grid templateColumns="repeat(6, 1fr)" gap={6}>
