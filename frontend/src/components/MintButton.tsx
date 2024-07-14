@@ -10,6 +10,7 @@ import { LEVEL_TO_NAME, MIN_SCORE_FOR_LEVEL } from '../lib/scoreLib';
 
 import {
   Button,
+  Box,
   CircularProgress,
   CircularProgressLabel,
   Flex
@@ -61,7 +62,7 @@ const MintButton = ({ address, totalScore, chainId, contractAddress }: MintButto
   }
 
   return (
-    <>
+    <Box display='flex-col'>
       <Button onClick={mint} disabled={!canMint || isSuccess}>
         Mint {nftName} NFT
       </Button>
@@ -81,7 +82,7 @@ const MintButton = ({ address, totalScore, chainId, contractAddress }: MintButto
         isSuccess &&
         <p>NFT minted successfully</p>
       }
-    </>
+    </Box>
   );
 };
 
