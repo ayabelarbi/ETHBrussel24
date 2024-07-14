@@ -13,9 +13,11 @@ import {
   Flex
 } from "@chakra-ui/react";
 
-if (!import.meta.env.VITE_SC_ADDRESS) {
-  throw new Error('REACT_APP_SC_ADDRESS not set in .env');
-}
+// if (!import.meta.env.VITE_SC_ADDRESS) {
+//   throw new Error('REACT_APP_SC_ADDRESS not set in .env');
+// }
+
+const VITE_SC_ADDRESS = "0x6561cca425483f2d36636427E94F3aA7Bd9b38A8"
 
 interface MintButtonParams {
   address: `0x${string}` | undefined
@@ -38,7 +40,7 @@ const MintButton = ({ address, totalScore }: MintButtonParams) => {
   const mint = async () => {
     setLoading(true);
     writeContract({
-      address: getAddress(import.meta.env.VITE_SC_ADDRESS as string),  // make sure to use 0x{string} format
+      address: getAddress(VITE_SC_ADDRESS),  // make sure to use 0x{string} format
       abi,
       functionName: 'mint',
       args: [address, messageHash, signature, level - 1], // /!\ the levels are 0-indexed (0, 1, 2) on the smart contract

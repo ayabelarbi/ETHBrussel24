@@ -1,5 +1,4 @@
 import { Flex, Text, Button } from '@chakra-ui/react';
-
 import { usePrivy } from '@privy-io/react-auth';
 import { useAccount, useDisconnect } from 'wagmi';
 
@@ -13,13 +12,13 @@ const Navbar = () => {
   const { disconnect } = useDisconnect();
   const navigate = useNavigate(); // Initialize the navigate function
 
-  const handleLogout = () => {
+  const handleLogout = async() => {
 
     // if privy is authenticated, logout
     if (authenticated){
-     logout();
+     await logout();
     } else if (isConnected){
-      disconnect();
+      await disconnect();
     }
 
     navigate('/'); // navigate to the home page
