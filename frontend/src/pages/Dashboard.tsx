@@ -1,4 +1,4 @@
-import { Box, Flex, Heading } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import ChainData from '../components/ChainsData';
 import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';

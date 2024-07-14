@@ -12,23 +12,23 @@ const Navbar = () => {
   const { disconnect } = useDisconnect();
   const navigate = useNavigate(); // Initialize the navigate function
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
 
     // if privy is authenticated, logout
-    if (authenticated){
-     await logout();
-    } else if (isConnected){
+    if (authenticated) {
+      await logout();
+    } else if (isConnected) {
       await disconnect();
     }
 
     navigate('/'); // navigate to the home page
-}
+  }
 
   return (
     <Flex as="nav" align="center" justify="space-between" wrap="wrap" padding="1.5rem" borderColor='purple' borderBottom='1px solid' color="yellow.500">
       <Flex align="center" mr={5}>
         <Text fontSize="lg" fontWeight="bold">
-            BUZZ
+          BUZZ
         </Text>
       </Flex>
 
