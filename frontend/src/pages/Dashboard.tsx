@@ -1,15 +1,18 @@
-// create the component 
-import { Box, Heading } from '@chakra-ui/react';
+import { Box, Flex, Heading } from '@chakra-ui/react';
 import ChainData from '../components/ChainsData';
+import Navbar from '../components/NavBar';
+import Footer from '../components/Footer';
 
 const Dashboard = () => {
-
-
   return (
-    <Box>
-      <Heading>Dashboard</Heading>
-      <ChainData />
-    </Box>
+    <Flex direction="column" minHeight="100vh">
+      <Navbar />
+      <Box flex="1">
+        <Heading>Dashboard</Heading>
+        <ChainData />
+      </Box>
+      <Footer />
+    </Flex>
   );
 };
 

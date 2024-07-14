@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   Box,
-  Heading,
-  Text,
+  Image,
   Button,
   useDisclosure,
   Modal,
@@ -15,17 +14,20 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 
-
+import { useAccount } from "wagmi";
 import ConnectionCard from "./ConnectionCard";
 import videoBg from "../assets/bg.mp4";
+import buzzHome from "../assets/BUZZ.gif";
 
 const Home = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isConnected } = useAccount();
+
   const [isSuccess, setIsSuccess] = useState(false); 
   const navigate = useNavigate(); 
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess || isConnected) {
         console.log('isSuccess', isSuccess);
       navigate('/dashboard'); 
     }
@@ -64,8 +66,8 @@ const Home = () => {
           }}
         />
         <Box position="relative" zIndex="2" textAlign="center">
-          <Heading>Home</Heading>
-          <Text>Welcome to Trust Score, The Reputation Layer for Web3</Text>
+          <Image src={buzzHome} alt="BUZZ" height="60%" />
+
           <Button onClick={connect}>Get Started</Button>
         </Box>
       </Box>

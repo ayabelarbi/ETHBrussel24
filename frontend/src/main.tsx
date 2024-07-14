@@ -13,12 +13,10 @@ import Dashboard from "./pages/Dashboard";
 
 import { PrivyProvider } from '@privy-io/react-auth';
 
-// import { Web3Auth, decodeToken } from "@web3auth/single-factor-auth";
 import { privateKeyProvider } from "./utils/privateKeyProviders";
 
 // import { ADAPTER_EVENTS, IProvider } from "@web3auth/base";
 // import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
-import Web3 from "web3";
 
 
 // const clientId = "BAoB4eLxa6edFP3ti85pbvLiSpSmuB8N_IdLlSA7YUNk1jEs7DKv928JRIleLBHh0pC08qkIaRp2Bj8SEgAnvcA";
@@ -30,8 +28,6 @@ const queryClient = new QueryClient();
 
 import Fonts from "./utils/fonts.tsx";
 import theme from "./utils/theme.tsx";
-
-import { initializeApp } from "firebase/app";
 
 
 const NavigateToDashboard = ({ setIsLoggedIn }: { setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>> }) => {
@@ -45,37 +41,7 @@ const NavigateToDashboard = ({ setIsLoggedIn }: { setIsLoggedIn: React.Dispatch<
 
 
 const App = () => {
-  // const [provider, setProvider] = useState<IProvider | null>(null);
-  // const [loggedIn, setLoggedIn] = useState(false);
-
-  // const app = initializeApp(firebaseConfig);
-
-  // useEffect(() => {
-  //   const init = async () => {
-  //     try {
-  //       await web3auth.init();
-  //       setProvider(web3auth.provider);
-
-  //       if (web3auth.status === ADAPTER_EVENTS.CONNECTED) {
-  //         setLoggedIn(true);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   init();
-  // }, []);
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // const Web3AuthOptions = {
-  //   clientId: clientId,
-  //   privateKeyProvider: privateKeyProvider
-  // };
-  // const web3auth = new Web3Auth(Web3AuthOptions);
-
-  // await web3auth.init();
 
   return (
     <React.StrictMode>
@@ -104,6 +70,8 @@ const App = () => {
                     <Route path="/" element={<Home />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     {isLoggedIn && <Route path="*" element={<NavigateToDashboard setIsLoggedIn={setIsLoggedIn} />} />}
+                  
+
                   </Routes>
                 </AuthContext.Provider>
               </QueryClientProvider>
