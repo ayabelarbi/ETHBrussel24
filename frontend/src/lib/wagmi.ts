@@ -1,6 +1,6 @@
 import { createConfig } from 'wagmi';
 import { http } from "viem";
-import { scrollSepolia, flareTestnet, morphSepolia } from 'viem/chains';
+import { scrollSepolia, flareTestnet, morphHolesky } from 'viem/chains';
 import Web3AuthConnectorInstance from '../hooks/connectWithWeb3Auth';
 
 export const zeroNetworktestnet = {
@@ -22,14 +22,14 @@ export const zeroNetworktestnet = {
 }
 
 export const config = createConfig({
-  chains: [scrollSepolia, zeroNetworktestnet, flareTestnet, morphSepolia],
+  chains: [scrollSepolia, zeroNetworktestnet, flareTestnet, morphHolesky],
   transports: {
     [scrollSepolia.id]: http(scrollSepolia.rpcUrls.default.http[0]),
     [zeroNetworktestnet.id]: http(zeroNetworktestnet.rpcUrls.default.http[0]),
     [flareTestnet.id]: http(flareTestnet.rpcUrls.default.http[0]),
-    [morphSepolia.id]: http(morphSepolia.rpcUrls.default.http[0]),
+    [morphHolesky.id]: http(morphHolesky.rpcUrls.default.http[0]),
   },
   connectors: [
-    Web3AuthConnectorInstance([zeroNetworktestnet, scrollSepolia, flareTestnet, morphSepolia]),
+    Web3AuthConnectorInstance([zeroNetworktestnet, scrollSepolia, flareTestnet, morphHolesky]),
   ]
 })

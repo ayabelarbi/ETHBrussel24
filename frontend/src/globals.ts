@@ -4,10 +4,10 @@ export const CHAIN_TO_SC_ADDRESS: { [key: string]: string } = {
   scroll: '0x21232567E7Abf788fAA91573c69D9718c15E361c'
 }
 
-import { scrollSepolia, flareTestnet, morphSepolia } from 'viem/chains';
+import { scrollSepolia, flareTestnet, morphHolesky } from 'viem/chains';
 
 export const CHAIN_TO_ID: { [key: string]: number } = {
   flare: flareTestnet.id,
-  morph: morphSepolia.id,
+  morph: morphHolesky.id,
   scroll: scrollSepolia.id
 }

@@ -78,7 +78,7 @@ const NFTCard = ({ tokenId, contractAddress, chainName, chainId }: NFTCardParams
           alt='NFT image'
           borderRadius='lg'
         />
-        <Stack mt='6' spacing='3'>
+        <Stack mt='6' spacing='3' minH='100px'>
           <Heading size='md'>{metadata?.name}</Heading>
           <Text>
             {metadata?.description} on {chainName}
